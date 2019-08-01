@@ -5,7 +5,6 @@ const { Title } = Typography;
 
 const HomePage = ({history}) => {
     const [hover, toggleHover] = useState(true);
-
     return (
         <Row
             type="flex"

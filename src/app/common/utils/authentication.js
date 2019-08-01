@@ -1,7 +1,7 @@
 import locationHelperBuilder from 'redux-auth-wrapper/history4/locationHelper';
 import { connectedRouterRedirect } from 'redux-auth-wrapper/history4/redirect'
 import Loading from '../components/Loading';
-import {DASHBOARD_ROUTE, LOGIN_ROUTE} from "../constants"; // change it to your custom component
+import {DASHBOARD_ROUTE, LOGIN_ROUTE} from "../constants";
 
 const locationHelper = locationHelperBuilder({});
 
@@ -15,8 +15,8 @@ export const UserIsAuthenticated = connectedRouterRedirect({
         !auth.isLoaded || isInitializing === true,
     authenticatedSelector: ({ firebase: { auth } }) =>
         auth.isLoaded && !auth.isEmpty,
-    redirectAction: newLoc => (dispatch, {history}) => {
-        history.push(LOGIN_ROUTE); // or routerActions.replace
+    redirectAction: () => (dispatch, {history}) => {
+        history.push(LOGIN_ROUTE);
     },
 });
 
@@ -30,7 +30,10 @@ export const UserIsNotAuthenticated = connectedRouterRedirect({
         !auth.isLoaded || isInitializing === true,
     authenticatedSelector: ({ firebase: { auth } }) =>
         auth.isLoaded && auth.isEmpty,
-    redirectAction: newLoc => (dispatch, {history}) => {
-        history.push(DASHBOARD_ROUTE); // or routerActions.replace// or routerActions.replace
+    redirectAction: () => (dispatch, {history}) => {
+        history.push(DASHBOARD_ROUTE);
     },
 });
+
+
+// TODO: Add a admin only protection
