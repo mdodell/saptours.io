@@ -1,5 +1,4 @@
 import React from 'react';
-import {UserIsAuthenticated} from "../../common/utils/authentication";
 
 const DashboardPage = () => {
     return (
@@ -7,4 +6,4 @@ const DashboardPage = () => {
     );
 };
 
-export default UserIsAuthenticated(DashboardPage);
+export default DashboardPage;

@@ -7,6 +7,7 @@ import DashboardPage from "../../pages/DashboardPage";
 import LoginPage from "../../pages/LoginPage";
 import NavBar from '../components/NavBar';
 import { isMobileOnly } from "react-device-detect";
+import {UserIsAuthenticated, UserIsNotAuthenticated} from "../utils/authentication";
 
 class App extends Component {
     render() {
@@ -19,8 +20,8 @@ class App extends Component {
                         <Fragment>
                             <NavBar/>
                             <Switch key={this.props.location.key}>
-                                <Route path={LOGIN_ROUTE} component={LoginPage}/>
-                                <Route path={DASHBOARD_ROUTE} component={DashboardPage}/>
+                                <Route path={LOGIN_ROUTE} component={UserIsNotAuthenticated(LoginPage)}/>
+                                <Route path={DASHBOARD_ROUTE} component={UserIsAuthenticated(DashboardPage)}/>
                                 <Route path={ERROR_ROUTE} component={ErrorPage}/>
                             </Switch>
                         </Fragment>

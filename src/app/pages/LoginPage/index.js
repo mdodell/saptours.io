@@ -5,7 +5,6 @@ import SignUp from "./components/SignUp/SignUp";
 import {Formik} from "formik";
 import * as yup from 'yup';
 import {registerUser} from "../../redux/auth/authActions";
-import {UserIsNotAuthenticated} from "../../common/utils/authentication";
 
 const { Title } = Typography;
 
@@ -68,4 +67,4 @@ const styles={
     }
 };
 
-export default UserIsNotAuthenticated(connect(mapStateToProps, mapDispatchToProps)(LoginPage));
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
