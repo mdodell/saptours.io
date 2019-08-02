@@ -1,22 +1,17 @@
 import React from 'react';
-import { Menu } from 'antd';
+import {Icon, Menu} from 'antd';
 
 const MenuOptions = ({signOut}) => {
     return (
         <Menu style={{marginTop: '0em'}} theme="dark">
             <Menu.Item>
                 <p>
-                    1st menu item
-                </p>
-            </Menu.Item>
-            <Menu.Item>
-                <p>
-                    2nd menu item
+                    <Icon type="setting" /> Settings
                 </p>
             </Menu.Item>
             <Menu.Item onClick={signOut}>
                 <p>
-                    Sign Out
+                    <Icon type="disconnect" /> Sign Out
                 </p>
             </Menu.Item>
         </Menu>

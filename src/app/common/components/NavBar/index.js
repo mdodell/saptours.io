@@ -36,6 +36,7 @@ class NavBar extends Component {
         const { auth, profile } = this.props;
         const authenticated = auth.isLoaded && !auth.isEmpty;
         return (
+            <Layout>
             <Layout.Header style={styles.headerPadding}>
                 <Row type="flex" align="middle" style={styles.rowStyle} justify="space-between">
                     <Col>
@@ -46,6 +47,7 @@ class NavBar extends Component {
                     </Col>}
                 </Row>
             </Layout.Header>
+            </Layout>
         );
     }
 };

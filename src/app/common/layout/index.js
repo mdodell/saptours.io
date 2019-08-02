@@ -6,6 +6,7 @@ import ErrorPage from "../../pages/ErrorPage";
 import DashboardPage from "../../pages/DashboardPage";
 import LoginPage from "../../pages/LoginPage";
 import NavBar from '../components/NavBar';
+import SideNav from '../components/SideNav';
 import { isMobileOnly } from "react-device-detect";
 import {UserIsAuthenticated, UserIsNotAuthenticated} from "../utils/authentication";
 

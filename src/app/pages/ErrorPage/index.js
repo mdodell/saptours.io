@@ -15,12 +15,12 @@ const renderErrors = (messages) => {
     )
 };
 
-const ErrorPage = ({history, messages, location}) => {
+const ErrorPage = ({history, messages, location, status = "404"}) => {
     return (
         <DefinedRow width="100vw" height="calc(100vh - 64px)" type="flex" align="middle" justify="center">
             <Col span={24}>
             <Result
-                status="500"
+                status={status}
                 title="You look a little lost..."
                 subTitle="Go look for a tour guide to help you get back!"
                 extra={[
