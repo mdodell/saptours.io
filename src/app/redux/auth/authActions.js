@@ -3,7 +3,6 @@ import { TOUR_GUIDE, HOST, CHATTER, ADMISSIONS_STAFF } from "../../common/consta
 
 export const registerUser = (user) => { //curly braces are implied
     return async (dispatch, getState, {getFirebase, getFirestore}) => {
-        console.log(user.role.includes("Tour Guide"));
         const firebase = getFirebase();
         const firestore = getFirestore();
         try {
@@ -32,7 +31,6 @@ export const registerUser = (user) => { //curly braces are implied
 };
 
 export const login = (creds) => {
-    console.log(creds);
     return async (dispatch, getState, { getFirebase }) => {
         const firebase = getFirebase();
         try {
