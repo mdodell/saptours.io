@@ -5,6 +5,7 @@ import SignUp from "./components/SignUp/SignUp";
 import {Formik} from "formik";
 import * as yup from 'yup';
 import {registerUser} from "../../redux/auth/authActions";
+import {DefinedRow} from "../../common/components/styled";
 
 const { Title } = Typography;
 
@@ -40,13 +41,13 @@ const validationSchema = yup.object().shape({
 
 const LoginPage = ({registerUser}) => {
     return (
-        <Row type="flex" justify="center" align="middle" style={styles.pageHeight}>
+        <DefinedRow height="calc(100vh - 64px)" type="flex" justify="center" align="middle" gutter={16}>
             <Col span={14}>
                 <Row type="flex" justify="center" align="middle">
-                    <Icon type="bank" style={{fontSize: '18em'}}/>
+                    <Icon type="bank" style={{fontSize: '30vw'}}/>
                 </Row>
             </Col>
-            <Col span={8}>
+            <Col span={8} xl={10}>
                 <Row type="flex" justify="center" align="middle">
                     <Col span={24}>
                         <Title level={4}>Don't have an account?</Title>
@@ -57,14 +58,10 @@ const LoginPage = ({registerUser}) => {
                     <Formik render={SignUp} initialValues={initialValues} onSubmit={formProps => registerUser(formProps)} validationSchema={validationSchema}/>
                 </Row>
             </Col>
-        </Row>
+        </DefinedRow>
     );
 };
 
-const styles={
-    pageHeight: {
-        height: 'calc(100vh - 64px)'
-    }
-};
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import { Calendar, Badge, Switch } from 'antd';
 import './index.css';
-import TourAssignmentModal from "../modals/TourAssignmentModal";
+import TourAssignmentModal from "../../../common/components/modals/TourAssignmentModal";
 
 class TourCalendar extends Component {
 
@@ -61,7 +61,8 @@ class TourCalendar extends Component {
         })
     };
 
-    closeModal = () => {
+    closeModal = (event) => {
+        event.preventDefault();
         this.setState({
             modalState: false
         })
@@ -72,7 +73,8 @@ class TourCalendar extends Component {
         return (
             <ul className="events">
                 {listData.map(item => (
-                    <li key={item.content} onClick={() => {
+                    <li key={item.content} onClick={(e) => {
+                        e.preventDefault();
                         this.handleTourSelect(item)
                     }}>
                         <Badge status={item.type} text={item.content} />

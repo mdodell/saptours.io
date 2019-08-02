@@ -2,7 +2,6 @@ import React from 'react';
 import { Modal } from 'antd';
 
 const TourAssignmentModal = ({onCancel, onOk, tour, visible}) => {
-    console.log(tour);
     return (
         <div>
             <Modal

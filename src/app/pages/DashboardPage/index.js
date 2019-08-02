@@ -1,10 +1,12 @@
 import React, {Fragment} from 'react';
-import { Layout, Calendar} from 'antd';
+import { Layout } from 'antd';
 import { Redirect, Route, Switch } from "react-router-dom";
 import SideNav from "../../common/components/SideNav";
-import TourCalendar from "../../common/components/TourCalendar";
+import TourCalendar from "./TourCalendar";
+import {DASHBOARD_CALENDAR_ROUTE, DASHBOARD_ROUTE, USER_TABLE_ROUTE} from "../../common/constants";
+import UserTable from "./UserTable";
 
-const { Header, Content, Footer } = Layout;
+const { Content } = Layout;
 
 const DashboardPage = () => {
     return (
@@ -14,8 +16,9 @@ const DashboardPage = () => {
                 <Layout>
                     <Content style={{ margin: '0 16px' }}>
                         <Switch>
-                            <Redirect exact from="/dashboard" to="/dashboard/calendar" />
-                            <Route path="/dashboard/calendar" component={TourCalendar} />
+                            <Redirect exact from={DASHBOARD_ROUTE} to={DASHBOARD_CALENDAR_ROUTE} />
+                            <Route path={DASHBOARD_CALENDAR_ROUTE} component={TourCalendar} />
+                            <Route path={USER_TABLE_ROUTE} component={UserTable} />
                             <Redirect to="/error"/> 
                         </Switch>
                     </Content>

@@ -73,7 +73,7 @@ const SignUp = ({ handleSubmit, initialValues}) => {
 
 const styles = {
     buttonStyle: {
-        marginTop: '1em'
+        marginTop: '2em'
     }
 };
 
