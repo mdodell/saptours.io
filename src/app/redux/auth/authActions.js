@@ -1,5 +1,5 @@
 import { openNotification } from "../../common/utils/openNotification";
-import { TOUR_GUIDE, HOST, CHATTER, ADMISSIONS_STAFF } from "../../common/constants";
+import { TOUR_GUIDE, HOST, CHATTER } from "../../common/constants";
 
 export const registerUser = (user) => { //curly braces are implied
     return async (dispatch, getState, {getFirebase, getFirestore}) => {
@@ -19,8 +19,7 @@ export const registerUser = (user) => { //curly braces are implied
                 roles: {
                     tourGuide: user.role.includes(TOUR_GUIDE),
                     host: user.role.includes(HOST),
-                    chatter: user.role.includes(CHATTER),
-                    admissionsStaff: user.role.includes(ADMISSIONS_STAFF)
+                    chatter: user.role.includes(CHATTER)
                 }
             };
             await firestore.set(`users/${createdUser.user.uid}`, {...newUser});

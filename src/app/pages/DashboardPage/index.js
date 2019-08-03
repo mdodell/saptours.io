@@ -12,7 +12,7 @@ const DashboardPage = () => {
     return (
         <Fragment>
             <Layout style={{height: 'calc(100vh - 64px)'}}>
-                <SideNav />
+                <SideNav  />
                 <Layout>
                     <Content style={{ margin: '0 16px' }}>
                         <Switch>

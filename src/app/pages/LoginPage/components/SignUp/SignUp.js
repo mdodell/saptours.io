@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col, Button } from 'antd';
 import { Field, Form } from "formik";
 import { AntInput, AntPassword, AntSelect } from "../../../../common/components/form/AntFormik";
-import {TOUR_GUIDE, CHATTER, HOST, ADMISSIONS_STAFF} from "../../../../common/constants";
+import {TOUR_GUIDE, CHATTER, HOST} from "../../../../common/constants";
 
 const SignUp = ({ handleSubmit, initialValues}) => {
     return (
@@ -59,7 +59,7 @@ const SignUp = ({ handleSubmit, initialValues}) => {
                             mode="multiple"
                             component={AntSelect}
                             defaultValue={initialValues.role}
-                            selectOptions={[TOUR_GUIDE, CHATTER, HOST, ADMISSIONS_STAFF]}
+                            selectOptions={[TOUR_GUIDE, CHATTER, HOST]}
                             hasFeedback
                         />
                     </Col>
