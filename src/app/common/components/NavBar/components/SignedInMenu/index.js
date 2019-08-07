@@ -1,6 +1,7 @@
 import React from 'react';
 import {Avatar, Typography, Row, Col, Icon, Dropdown } from "antd";
 import MenuOptions from "./MenuOptions";
+import FeedbackIcon from "../FeedbackIcon"
 
 const { Title } = Typography;
 
@@ -8,7 +9,11 @@ const SignedInMenu = ({profile, signOut}) => {
     return (
         <Row type="flex" align="middle" justify="center">
             <Col>
-                <Avatar size="large" icon="user" />
+                <Row type="flex" align="middle" justify="center">
+                    <FeedbackIcon />
+                    <Avatar size="large" icon="user" />
+                </Row>
+
             </Col>
             <Dropdown overlay={() => <MenuOptions signOut={signOut} />} trigger={['click']} placement="bottomRight">
                 <Row type="flex" align="middle" justify="center">
