@@ -10,3 +10,14 @@ export const DefinedRow = styled(Row)`
     width: ${props => props.width || '100vw' };
     flex-direction: ${props => props.direction || 'row'}
 `;
+
+export const VerticalLineContainer = styled.div`
+    display: flex
+    justify-content: center
+    align-items: center;
+`;
+
+export const VerticalLine = styled.div`
+  border-left: 2px solid gray;
+  height: calc(95vh - 64px);
+`;

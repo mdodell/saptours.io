@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Layout, Menu, Icon} from 'antd';
 import {Link, withRouter} from "react-router-dom";
-import {DASHBOARD_CALENDAR_ROUTE, USER_TABLE_ROUTE} from "../../constants";
+import {DASHBOARD_CALENDAR_ROUTE, PROFILE_ROUTE, USER_TABLE_ROUTE} from "../../constants";
 
 const {Sider} = Layout;
 
@@ -30,6 +30,12 @@ class SideNav extends Component {
                         <Link to={USER_TABLE_ROUTE}>
                             <Icon type="user"/>
                             <span>Guide List</span>
+                        </Link>
+                    </Menu.Item>
+                    <Menu.Item key={PROFILE_ROUTE}>
+                        <Link to={PROFILE_ROUTE}>
+                            <Icon type="profile"/>
+                            <span>Profile Page</span>
                         </Link>
                     </Menu.Item>
                 </Menu>

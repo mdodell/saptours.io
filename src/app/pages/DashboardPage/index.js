@@ -3,8 +3,9 @@ import { Layout } from 'antd';
 import { Redirect, Route, Switch } from "react-router-dom";
 import SideNav from "../../common/components/SideNav";
 import TourCalendar from "./TourCalendar";
-import {DASHBOARD_CALENDAR_ROUTE, DASHBOARD_ROUTE, USER_TABLE_ROUTE} from "../../common/constants";
+import {DASHBOARD_CALENDAR_ROUTE, DASHBOARD_ROUTE, PROFILE_ROUTE, USER_TABLE_ROUTE} from "../../common/constants";
 import UserTable from "./UserTable";
+import ProfilePage from "../ProfilePage";
 
 const { Content } = Layout;
 
@@ -19,6 +20,7 @@ const DashboardPage = () => {
                             <Redirect exact from={DASHBOARD_ROUTE} to={DASHBOARD_CALENDAR_ROUTE} />
                             <Route path={DASHBOARD_CALENDAR_ROUTE} component={TourCalendar} />
                             <Route path={USER_TABLE_ROUTE} component={UserTable} />
+                            <Route path={PROFILE_ROUTE} component={ProfilePage} />
                             <Redirect to="/error"/> 
                         </Switch>
                     </Content>

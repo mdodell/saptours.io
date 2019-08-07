@@ -4,10 +4,10 @@ import { Field, Form } from "formik";
 import { AntInput, AntPassword, AntSelect } from "../../../../common/components/form/AntFormik";
 import {TOUR_GUIDE, CHATTER, HOST} from "../../../../common/constants";
 
-const SignUp = ({ handleSubmit, initialValues}) => {
+const SignUp = ({ initialValues }) => {
     return (
             <Row gutter={16}>
-                <Form onSubmit={handleSubmit}>
+                <Form>
                     <Col span={12}>
                     <Field
                         component={AntInput}

@@ -6,6 +6,7 @@ import {Formik} from "formik";
 import * as yup from 'yup';
 import {registerUser} from "../../redux/auth/authActions";
 import {DefinedRow} from "../../common/components/styled";
+import { TOUR_GUIDE } from "../../common/constants";
 
 const { Title } = Typography;
 
@@ -24,7 +25,7 @@ const initialValues = {
     email: '',
     passwordOne: '',
     passwordTwo: '',
-    role: ['Tour Guide']
+    role: [TOUR_GUIDE]
 };
 
 

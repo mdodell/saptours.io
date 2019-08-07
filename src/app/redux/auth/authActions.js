@@ -15,11 +15,11 @@ export const registerUser = (user) => { //curly braces are implied
             let newUser = {
                 fullName: `${user.firstName} ${user.lastName}`,
                 email: user.email,
-                createdAt: firestore.FieldValue.serverTimestamp(), //we can set new fields in here, such as their user roles
                 roles: {
                     tourGuide: user.role.includes(TOUR_GUIDE),
                     host: user.role.includes(HOST),
-                    chatter: user.role.includes(CHATTER)
+                    chatter: user.role.includes(CHATTER),
+                    admin: false
                 }
             };
             await firestore.set(`users/${createdUser.user.uid}`, {...newUser});
