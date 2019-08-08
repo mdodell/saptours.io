@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {Layout, Menu, Icon} from 'antd';
 import {Link, withRouter} from "react-router-dom";
 import {DASHBOARD_CALENDAR_ROUTE, PROFILE_ROUTE, USER_TABLE_ROUTE} from "../../constants";
+import { compose } from 'redux';
+import {firebaseConnect} from "react-redux-firebase";
 
 const {Sider} = Layout;
 
@@ -15,7 +17,7 @@ class SideNav extends Component {
     };
 
     render(){
-        const { location } = this.props;
+        const { location, firebase } = this.props;
         const { collapsed } = this.state;
         return (
             <Sider theme="light" collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
@@ -32,8 +34,8 @@ class SideNav extends Component {
                             <span>Guide List</span>
                         </Link>
                     </Menu.Item>
-                    <Menu.Item key={PROFILE_ROUTE}>
-                        <Link to={PROFILE_ROUTE}>
+                    <Menu.Item key={`${PROFILE_ROUTE}/${firebase.auth().currentUser.uid}`}>
+                        <Link to={`${PROFILE_ROUTE}/${firebase.auth().currentUser.uid}`}>
                             <Icon type="profile"/>
                             <span>Profile Page</span>
                         </Link>
@@ -44,4 +46,7 @@ class SideNav extends Component {
     }
 }
 
-export default withRouter(SideNav);
+export default compose(
+    withRouter,
+    firebaseConnect()
+)(SideNav);

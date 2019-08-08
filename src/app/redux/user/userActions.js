@@ -9,7 +9,8 @@ import {
     MKTYP,
     POSSE,
     REGULAR_DECISION,
-    TOUR_GUIDE
+    TOUR_GUIDE,
+    TOUR_SHIFTS
 } from "../../common/constants";
 
 export const updateProfile = (user) => {
@@ -106,25 +107,62 @@ export const updateUserProfileExtracurriculars = (extracurricularForm) => {
     };
 };
 
+const deleteTourAvailability = (firestore, day, time, user) => {
+    firestore.get({
+        collection: 'tourAvailability',
+        where: [['day', '==',  day.charAt(0).toUpperCase() + day.slice(1)], ['hour', '==', time.value]]
+    })
+        .then(result => result.docs.forEach(document =>
+            firestore.update({collection: 'tourAvailability', doc: document.id}, {
+                guides: firestore.FieldValue.arrayRemove(user)
+            })
+        ))
+        .catch(error => openNotification('error', 'bottomRight', 'Error', error.message, 3));
+};
+
+const createTourAvailability = (firestore, day, time, user) => {
+    firestore.get({
+        collection: 'tourAvailability',
+        where: [['day', '==',  day.charAt(0).toUpperCase() + day.slice(1)], ['hour', '==', time.value]]
+    })
+        .then(result => result.docs.forEach(document =>
+            firestore.update({collection: 'tourAvailability', doc: document.id}, {
+                guides: firestore.FieldValue.arrayUnion(user)
+            })
+        ))
+        .catch(error => openNotification('error', 'bottomRight', 'Error', error.message, 3));
+};
+
+const updateTourShiftAvailability = (availability, day, firestore, user) => {
+    TOUR_SHIFTS.forEach(time => {
+        if(availability[day]) {
+            if (availability[day].some(tour => tour === time.value)) {
+                createTourAvailability(firestore, day, time, user);
+            } else {
+                deleteTourAvailability(firestore, day, time, user);
+            }
+        } else {
+            deleteTourAvailability(firestore, day, time, user);
+        }
+    });
+};
+
 export const updateUserProfileAvailability = (availability) => {
-    console.log(availability.monday);
     return async (dispatch, getState, {getFirebase, getFirestore}) => {
         const firebase = getFirebase();
         const firestore = getFirestore();
         const user = firebase.auth().currentUser.uid;
+        console.log('running');
         try {
-            // for each time in constants array
-            // if submitted array contains that time
-            // then add it
-            // else remove it
-            availability.monday.forEach(time => {
-                firestore.get({collection: 'tourAvailability', where: [['day', '==', 'Monday'], ['hour', '==', time]]}).then(result => console.log(result)).catch(err => console.log(err));
-            });
-            // await firestore.update({collection: 'tourAvailability', doc: }, {
-            //     guides: firestore.FieldValue.arrayUnion(user)
-            // }).then(() => openNotification('success', 'bottomRight', 'Success!', "You have updated your profile!", 3))
+            updateTourShiftAvailability(availability, 'monday', firestore, user);
+            updateTourShiftAvailability(availability, 'tuesday', firestore, user);
+            updateTourShiftAvailability(availability, 'wednesday', firestore, user);
+            updateTourShiftAvailability(availability, 'thursday', firestore, user);
+            updateTourShiftAvailability(availability, 'friday', firestore, user);
+            openNotification('success', 'bottomRight', 'Error', 'Availability was updated!', 3)
         } catch (error) {
             openNotification('error', 'bottomRight', 'Error', error.message, 3);
         }
     };
 };
+

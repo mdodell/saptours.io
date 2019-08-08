@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Icon, Button } from 'antd';
+import { Modal, Icon } from 'antd';
 
 const UserFeedbackModal=({visible, onCancel})=>{
         return(
@@ -10,8 +10,7 @@ const UserFeedbackModal=({visible, onCancel})=>{
                 closable={true}
                 bodyStyle={{padding: 10}}
                 footer={null}
-                width={300}
-
+                width={500}
             >
                 <div>
                     <Icon type="bug"
@@ -36,7 +35,7 @@ const UserFeedbackModal=({visible, onCancel})=>{
                           theme="twoTone"
                           twoToneColor="#003478"/>
 
-                    <a href="https://mail.google.com/mail/u/0/?view=cm&fs=1&to=bgreene@brandeis.edu&to=mdodell@brandeis.edu&su=SAP%20Website&tf=1"
+                    <a href="https://mail.google.com/mail/u/0/?view=cm&fs=1&to=bgreene@brandeis.edu,mdodell@brandeis.edu&su=SAP%20Website&tf=1"
                        style={styles.linkStyle}>
                         Contact the Developers!</a>
                 </div>

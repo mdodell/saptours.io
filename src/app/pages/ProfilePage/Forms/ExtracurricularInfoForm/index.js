@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Button, Typography } from 'antd';
 import { Form, Field } from 'formik';
-import {AntInput, AntSelect, AntTextArea} from "../../../../common/components/form/AntFormik";
+import {AntSelect, AntTextArea} from "../../../../common/components/form/AntFormik";
 import {CLUBS_LIST} from "../../../../common/constants";
 
 const { Title } = Typography;

@@ -44,9 +44,8 @@ const AcademicInfoForm = () => {
                 </Col>
                 <Col span={10}>
                     <Field
-                        label="Graduation Year"
                         name="graduationYear"
-                        placeholder="2021"
+                        label="Graduation Year"
                         component={AntSelect}
                         selectOptions={getGraduationYears()}
                     />

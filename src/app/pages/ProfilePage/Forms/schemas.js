@@ -15,7 +15,7 @@ export const userValidationSchema = yup.object().shape({
 export const academicValidationSchema = yup.object().shape({
     majors: yup.array().max(3, 'You can only have a maximum of 3 majors!').required('Required!'),
     minors: yup.array().max(3, 'You can only have a maximum of 3 minors!'),
-    graduationYear: yup.number().required('Required!'),
+    graduationYear: yup.number().typeError('Required!').required('Required!'),
     decisionType: yup.array().required('Required'),
     postGraduationPlans: yup.string()
 });
@@ -25,4 +25,12 @@ export const extracurricularValidationSchema = yup.object().shape({
     jobs: yup.string(),
     internships: yup.string(),
     research: yup.string()
+});
+
+export const availabilityValidationSchema = yup.object().shape({
+    monday: yup.array(),
+    tuesday: yup.array(),
+    wednesday: yup.array(),
+    thursday: yup.array(),
+    friday: yup.array()
 });

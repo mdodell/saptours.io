@@ -1,4 +1,4 @@
-import React, {Component, Fragment, useState} from 'react';
+import React, {Fragment, useState} from 'react';
 import {Icon} from "antd";
 import UserFeedbackModal from "../../../modals/UserFeedbackModal";
 

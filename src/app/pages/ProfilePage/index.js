@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Typography, Steps, Icon, Spin } from 'antd';
+import {Col, Typography, Steps, Icon, Spin, Button, Row} from 'antd';
 import { connect } from 'react-redux';
 import {DefinedRow, VerticalLine, VerticalLineContainer} from "../../common/components/styled";
 import UserInfoForm from "./Forms/UserInfoForm";
@@ -17,12 +17,17 @@ import {
     TOUR_GUIDE
 } from "../../common/constants";
 import moment from "moment";
-import {academicValidationSchema, extracurricularValidationSchema, userValidationSchema} from "./Forms/schemas";
+import {
+    academicValidationSchema,
+    availabilityValidationSchema,
+    extracurricularValidationSchema,
+    userValidationSchema
+} from "./Forms/schemas";
 import {
     updateUserProfileInfo,
     updateUserProfileAcademics,
     updateUserProfileExtracurriculars,
-    updateUserProfileAvailability
+    updateUserProfileAvailability,
 } from "../../redux/user/userActions";
 import AcademicInfoForm from "./Forms/AcademicInfoForm";
 import ExtracurricularInfoForm from "./Forms/ExtracurricularInfoForm";
@@ -33,14 +38,14 @@ const { Step } = Steps;
 
 const mapStateToProps = (state) => ({
     profile: state.firebase.profile,
-    tourAvailability: state.firestore.data.tourAvailability
+    tourAvailability: state.firestore.ordered.tourAvailability,
 });
 
 const mapDispatchToProps = {
     updateUserProfileInfo,
     updateUserProfileAcademics,
     updateUserProfileExtracurriculars,
-    updateUserProfileAvailability
+    updateUserProfileAvailability,
 };
 
 const populateRoles = (profileRoles) => {
@@ -83,14 +88,12 @@ const populateDecisionType = (decisionTypes) => {
     if(decisionTypes.international) {
         decisionTypeTitles.push(INTERNATIONAL_STUDENT);
     };
-    console.log(decisionTypeTitles);
     return decisionTypeTitles;
 };
 
-const ProfilePage = ({profile, tourAvailability, updateUserProfileInfo, updateUserProfileAcademics, updateUserProfileExtracurriculars, updateUserProfileAvailability}) => {
+const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInfo, updateUserProfileAcademics, updateUserProfileExtracurriculars, updateUserProfileAvailability}) => {
 
     const [count, setStep] = useState(0);
-
     if(!profile.isLoaded && profile.isEmpty){
         return (
             <DefinedRow type="flex" direction="column" height="100%" width="100%" justify="center" align="middle">
@@ -99,6 +102,13 @@ const ProfilePage = ({profile, tourAvailability, updateUserProfileInfo, updateUs
             </DefinedRow>
         )
     }
+    const getTourAvailability = (day) => {
+        let times = [];
+        if(tourAvailability){
+            tourAvailability.filter(tourDate => tourDate.day === day).forEach(tour => times.push(tour.hour));
+        }
+        return times;
+    };
 
     const userInitialValues = {
         firstName: profile.fullName.split(' ')[0],
@@ -127,6 +137,14 @@ const ProfilePage = ({profile, tourAvailability, updateUserProfileInfo, updateUs
         jobs: profile.jobs || ''
     };
 
+    const availabilityInitialValues = {
+        monday: getTourAvailability('Monday') || [],
+        tuesday: getTourAvailability('Tuesday') || [],
+        wednesday: getTourAvailability('Wednesday') || [],
+        thursday: getTourAvailability('Thursday') || [],
+        friday: getTourAvailability('Friday') || []
+    };
+
     const renderCurrentContent = () => {
         switch(count){
             case 0:
@@ -134,11 +152,14 @@ const ProfilePage = ({profile, tourAvailability, updateUserProfileInfo, updateUs
             case 1:
                 return <Formik enableReinitialize initialValues={academicInitialValues} validationSchema={academicValidationSchema} onSubmit={(formProps) => updateUserProfileAcademics(formProps)} render={AcademicInfoForm} />;
             case 2:
-                return <Formik enableReinitialize initialValues={extracurricularInitialValues} validationSchema={extracurricularValidationSchema} onSubmit={(formProps) => updateUserProfileExtracurriculars(formProps)} render={ExtracurricularInfoForm} />
+                return <Formik enableReinitialize initialValues={extracurricularInitialValues} validationSchema={extracurricularValidationSchema} onSubmit={(formProps) => updateUserProfileExtracurriculars(formProps)} render={ExtracurricularInfoForm} />;
             case 3:
-                return <Formik onSubmit={(formProps) => updateUserProfileAvailability(formProps)} render={AvailabilityInfoForm} />
+                return <Formik enableReinitialize initialValues={availabilityInitialValues} validationSchema={availabilityValidationSchema} onSubmit={(formProps) => updateUserProfileAvailability(formProps)} render={AvailabilityInfoForm} />;
+            default:
+                return <h1>Test</h1>
         }
     };
+
     return (
         <DefinedRow height="calc(100vh - 64px)" width="100%" type="flex">
             <Col span={5}>
@@ -165,6 +186,20 @@ const ProfilePage = ({profile, tourAvailability, updateUserProfileInfo, updateUs
                             marginTop: '1em'
                         }}>{renderCurrentContent()}</div>
                     </Col>
+                    <Col span={24}>
+                        <Row type="flex" align="end">
+                        <Button.Group size="large">
+                            {count > 0 && <Button type="primary" onClick={() => setStep(count - 1)}>
+                                <Icon type="left" />
+                                Previous
+                            </Button>}
+                            {count < 3 && <Button type="primary" onClick={() => setStep(count + 1)}>
+                                Next
+                                <Icon type="right" />
+                            </Button> }
+                        </Button.Group>
+                        </Row>
+                    </Col>
                 </DefinedRow>
             </Col>
         </DefinedRow>
@@ -173,7 +208,5 @@ const ProfilePage = ({profile, tourAvailability, updateUserProfileInfo, updateUs
 
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
-    firestoreConnect([
-        { collection: 'tourAvailability' },
-    ])
+    firestoreConnect((props) => [{collection: 'tourAvailability', where: ['guides', 'array-contains', props.match.params.id]}])
 )(ProfilePage);

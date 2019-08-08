@@ -20,7 +20,7 @@ const DashboardPage = () => {
                             <Redirect exact from={DASHBOARD_ROUTE} to={DASHBOARD_CALENDAR_ROUTE} />
                             <Route path={DASHBOARD_CALENDAR_ROUTE} component={TourCalendar} />
                             <Route path={USER_TABLE_ROUTE} component={UserTable} />
-                            <Route path={PROFILE_ROUTE} component={ProfilePage} />
+                            <Route path={`${PROFILE_ROUTE}/:id`} component={ProfilePage} />
                             <Redirect to="/error"/> 
                         </Switch>
                     </Content>
