@@ -24,7 +24,8 @@ export const registerUser = (user) => { //curly braces are implied
                 tourStatistics: {
                     droppedTours: 0,
                     claimedTours: 0,
-                    noShows: 0
+                    noShows: 0,
+                    totalTours: 0
                 }
             };
             await firestore.set(`users/${createdUser.user.uid}`, {...newUser});
