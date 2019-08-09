@@ -126,7 +126,7 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
         majors: profile.majors || [],
         minors: profile.minors || [],
         graduationYear: profile.graduationYear || null,
-        postGraduationPlans: profile.graduationPlans || 'hi',
+        postGraduationPlans: profile.graduationPlans || '',
         decisionType: profile.decisionType ? populateDecisionType(profile.decisionType) : []
     };
 
@@ -156,7 +156,7 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
             case 3:
                 return <Formik enableReinitialize initialValues={availabilityInitialValues} validationSchema={availabilityValidationSchema} onSubmit={(formProps) => updateUserProfileAvailability(formProps)} render={AvailabilityInfoForm} />;
             default:
-                return <h1>Test</h1>
+                return <h1>Error</h1>
         }
     };
 

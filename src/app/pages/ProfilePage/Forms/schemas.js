@@ -5,7 +5,7 @@ export const userValidationSchema = yup.object().shape({
     firstName: yup.string().required('Required!'),
     lastName: yup.string().required('Required!'),
     birthday: yup.string().required('Required').nullable(),
-    roles: yup.array().min(1, 'You must have at least one role!').required('Required!'),
+    roles: yup.array(),
     phoneNumber: yup.string().matches(phoneRegExp, 'Phone number is not valid!').required('Required!'),
     minTours: yup.number().typeError('Minimum tours must be a number!').min(0, 'You cannot have a negative number of tours!').required('Required!'),
     maxTours: yup.number().typeError('Maximum tours must be a number!').min(0, 'You cannot have a negative number of tours!').required('Required!').test('maxtours-greater-than-mintours', 'Maximum tours must be greater than minimum tours', function(value) {return this.parent.minTours < value }),

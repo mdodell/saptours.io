@@ -20,6 +20,11 @@ export const registerUser = (user) => { //curly braces are implied
                     host: user.role.includes(HOST),
                     chatter: user.role.includes(CHATTER),
                     admin: false
+                },
+                tourStatistics: {
+                    droppedTours: 0,
+                    claimedTours: 0,
+                    noShows: 0
                 }
             };
             await firestore.set(`users/${createdUser.user.uid}`, {...newUser});

@@ -32,12 +32,12 @@ const initialValues = {
 const validationSchema = yup.object().shape({
     firstName: yup.string().required('Required!'),
     lastName: yup.string().required('Required!'),
-    email: yup.string().email('Must be a valid email!').required('Required!'),
+    email: yup.string().matches(new RegExp('^[a-zA-Z0-9.!#$%&’*+\\/=?^_`{|}~-]+@brandeis+(?:\\.edu+)*$'),'Must be a valid brandeis.edu address!').required('Required!'),
     passwordOne: yup.string().required('Required!').min(6, 'Please try a longer password...'),
     passwordTwo: yup.string().required('Required!').test('passwords-match', 'Passwords must match!', function(value) {
         return this.parent.passwordOne === value
     }),
-    role: yup.array().min(1, 'You must have at least one role!')
+    role: yup.array()
 });
 
 const LoginPage = ({registerUser}) => {

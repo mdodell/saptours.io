@@ -13,24 +13,6 @@ import {
     TOUR_SHIFTS
 } from "../../common/constants";
 
-export const updateProfile = (user) => {
-    return async (dispatch, getState, {getFirebase}) => {
-        const firebase = getFirebase();
-        try {
-            await firebase.updateProfile(user); //updates our profile in firestore, it is running against the firebase instance rather than the firebase user. Has nothing to do with firebase auth area.
-            await firebase.auth().signInWithEmailAndPassword(user.email, user.password).then(userCredential => {
-                userCredential.user.updateProfile({
-                    displayName: user.displayName,
-                    // We can update photo url here too later
-                });
-                userCredential.user.updateEmail(user.email);
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    };
-};
-
 export const updateUserProfileInfo = (userForm) => {
     return async (dispatch, getState, { getFirebase, getFirestore }) => {
         const firebase = getFirebase();
