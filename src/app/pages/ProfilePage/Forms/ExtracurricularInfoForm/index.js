@@ -11,7 +11,7 @@ const ExtracurricularInfoForm = () => {
         <Form>
             <Row type="flex" justify="space-between">
                 <Col span={24}>
-                    <Title level={4}>Personal Information</Title>
+                    <Title level={4}>Extracurricular Information</Title>
                 </Col>
                 <Col span={24}>
                     <Field

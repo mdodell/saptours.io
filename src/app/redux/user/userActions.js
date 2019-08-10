@@ -10,7 +10,7 @@ import {
     POSSE,
     REGULAR_DECISION,
     TOUR_GUIDE,
-    TOUR_SHIFTS
+    TOUR_SHIFTS, TRANSFER_STUDENT
 } from "../../common/constants";
 
 export const updateUserProfileInfo = (userForm) => {
@@ -29,13 +29,12 @@ export const updateUserProfileInfo = (userForm) => {
                     tourAvailability: {
                         minTours: Number(userForm.minTours),
                         maxTours: Number(userForm.maxTours),
-                        activeStatus: userForm.activeStatus === 'Yes' ? true : false
+                        activeStatus: userForm.activeStatus === 'Yes' ? true : false,
+                        flexibility: userForm.flexibility === 'Yes' ? true : false
                     },
-                    roles: {
-                        tourGuide: userForm.roles.includes(TOUR_GUIDE),
-                        host: userForm.roles.includes(HOST),
-                        chatter: userForm.roles.includes(CHATTER),
-                    }
+                    "roles.tourGuide": userForm.roles.includes(TOUR_GUIDE),
+                    "roles.host": userForm.roles.includes(HOST),
+                    "roles.chatter": userForm.roles.includes(CHATTER)
                 }).then(() =>  openNotification('success', 'bottomRight', 'Success!', "You have updated your profile!", 3))
         } catch(error){
             openNotification('error', 'bottomRight', 'Error', error.message, 3);
@@ -61,7 +60,8 @@ export const updateUserProfileAcademics = (academicForm) => {
                     POSSE: academicForm.decisionType.includes(POSSE),
                     MKTYP: academicForm.decisionType.includes(MKTYP),
                     international: academicForm.decisionType.includes(INTERNATIONAL_STUDENT),
-                    legacy: academicForm.decisionType.includes(LEGACY_STUDENT)
+                    legacy: academicForm.decisionType.includes(LEGACY_STUDENT),
+                    transferStudent: academicForm.decisionType.includes(TRANSFER_STUDENT)
                 },
                 graduationPlans: academicForm.postGraduationPlans
             }).then(() =>  openNotification('success', 'bottomRight', 'Success!', "You have updated your profile!", 3))
@@ -134,14 +134,13 @@ export const updateUserProfileAvailability = (availability) => {
         const firebase = getFirebase();
         const firestore = getFirestore();
         const user = firebase.auth().currentUser.uid;
-        console.log('running');
         try {
             updateTourShiftAvailability(availability, 'monday', firestore, user);
             updateTourShiftAvailability(availability, 'tuesday', firestore, user);
             updateTourShiftAvailability(availability, 'wednesday', firestore, user);
             updateTourShiftAvailability(availability, 'thursday', firestore, user);
             updateTourShiftAvailability(availability, 'friday', firestore, user);
-            openNotification('success', 'bottomRight', 'Error', 'Availability was updated!', 3)
+            openNotification('success', 'bottomRight', 'Success', 'Availability was updated!', 3)
         } catch (error) {
             openNotification('error', 'bottomRight', 'Error', error.message, 3);
         }

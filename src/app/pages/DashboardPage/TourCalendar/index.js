@@ -1,87 +1,120 @@
 import React, {Component, Fragment} from 'react';
-import { Calendar, Badge, Switch } from 'antd';
+import { connect } from 'react-redux';
+import {Calendar, Badge, Switch, Row, Col, Typography, Button, Spin, Select} from 'antd';
 import './index.css';
 import TourAssignmentModal from "../../../common/components/modals/TourAssignmentModal";
+import {DefinedRow} from "../../../common/components/styled";
+import {MONTHS} from "../../../common/constants";
+import AddTourModal from "../../../common/components/modals/AddTourModal";
+import {compose} from "redux";
+import {firestoreConnect} from "react-redux-firebase";
+
+const { Title } = Typography;
+
+const mapStateToProps = (state) => ({
+    profile: state.firebase.profile,
+    tours: state.firestore.ordered.tours,
+    auth: state.firebase.auth
+});
 
 class TourCalendar extends Component {
 
     state = {
-        modalState: false,
+        tourAssignmentModalState: false,
+        addATourState: false,
         selectedTour: null,
-        personalFilter: false
+        personalFilter: false,
+        coverageFilter: false,
+        currentMonth: MONTHS[new Date().getMonth()]
     };
 
     getListData = (value)=> {
-        let listData;
-        switch (value.date()) {
-            case 8:
-                listData = [
-                    { type: 'success', content: '9:00 am Group Tour', guidesRequested: 3, guidesAssigned: 3, coverage: false, guideIds: ["Mitchell Dodell", "Ben Greene", "Angela Liu"], time: "9:00 am" },
-                    { type: 'error', content: '9:00 am Admissions Tour', guidesRequested: 3, guidesAssigned: 2, coverage: true, guideIds: ["Mitchell Dodell", "Ben Greene", ], time: "9:00 am" },
-                    { type: 'error', content: '11:00 am Admissions Tour', guidesRequested: 3, guidesAssigned: 3, coverage: true, guideIds: ["Mitchell Dodell", "Ben Greene", ], time: "11:00 am" },
-                ];
-                break;
-            case 9:
-                listData = [
-                    { type: 'success', content: '9:00 am Group Tour', guidesRequested: 3, guidesAssigned: 3, coverage: false, guideIds: ["Mitchell Dodell", "Ben Greene", "Angela Liu"], time: "9:00 am" },
-                    { type: 'error', content: '9:00 am Admissions Tour', guidesRequested: 3, guidesAssigned: 2, coverage: true, guideIds: ["Mitchell Dodell", "Ben Greene", ], time: "9:00 am" },
-                    { type: 'error', content: '11:00 am Admissions Tour', guidesRequested: 3, guidesAssigned: 3, coverage: true, guideIds: ["Mitchell Dodell", "Ben Greene", ], time: "11:00 am" },
-                ];
-                break;
-            case 11:
-                listData = [
-                    { type: 'success', content: '9:00 am Group Tour', guidesRequested: 3, guidesAssigned: 3, coverage: false, guideIds: ["Mitchell Dodell", "Ben Greene", "Angela Liu"], time: "9:00 am" },
-                    { type: 'error', content: '9:00 am Admissions Tour', guidesRequested: 3, guidesAssigned: 2, coverage: true, guideIds: ["Mitchell Dodell", "Ben Greene", ], time: "9:00 am" },
-                    { type: 'error', content: '11:00 am Admissions Tour', guidesRequested: 3, guidesAssigned: 3, coverage: true, guideIds: ["Mitchell Dodell", "Ben Greene", ], time: "11:00 am" },
-                ];
-                break;
-            case 10:
-                listData = [
-                    { type: 'success', content: '9:00 am Group Tour', guidesRequested: 3, guidesAssigned: 3, coverage: false, guideIds: ["Mitchell Dodell", "Ben Greene", "Angela Liu"], time: "9:00 am" },
-                    { type: 'error', content: '9:00 am Admissions Tour', guidesRequested: 3, guidesAssigned: 2, coverage: true, guideIds: ["Mitchell Dodell", "Ben Greene", ], time: "9:00 am" },
-                    { type: 'error', content: '11:00 am Admissions Tour', guidesRequested: 3, guidesAssigned: 3, coverage: true, guideIds: ["Mitchell Dodell", "Ben Greene", ], time: "11:00 am" },
-                ];
-                break;
-            case 15:
-                listData = [
-                    { type: 'success', content: '9:00 am Group Tour', guidesRequested: 3, guidesAssigned: 3, coverage: false, guideIds: ["Mitchell Dodell", "Ben Greene", "Angela Liu"], time: "9:00 am" },
-                    { type: 'error', content: '9:00 am Admissions Tour', guidesRequested: 3, guidesAssigned: 2, coverage: true, guideIds: ["Mitchell Dodell", "Ben Greene", ], time: "9:00 am" },
-                    { type: 'error', content: '11:00 am Admissions Tour', guidesRequested: 3, guidesAssigned: 3, coverage: true, guideIds: ["Mitchell Dodell", "Ben Greene", ], time: "11:00 am" },
-                ];
-                break;
-            default:
+        if(this.props.tours && MONTHS[value.month()] === this.state.currentMonth){
+            return this.props.tours.filter((tour) => value.date() === new Date(tour.date.seconds * 1000).getDate() && MONTHS[new Date(tour.date.seconds * 1000).getMonth()] === this.state.currentMonth);
         }
-        return listData || [];
+        return [];
     };
 
     handleTourSelect = (tour) => {
         this.setState({
-            modalState: true,
-            selectedTour: tour
+            tourAssignmentModalState: true,
+            selectedTour: tour,
         })
     };
 
-    closeModal = (event) => {
-        event.preventDefault();
+    openModal = (modal) => {
         this.setState({
-            modalState: false
+            [modal]: true
         })
+    };
+
+    closeModal = (modal) => {
+        this.setState({
+            [modal]: false,
+            selectedTour: null
+        });
+    };
+
+    formatTime = (tour) => {
+        const hours = new Date(tour.date.seconds * 1000).getHours();
+        const minutes = new Date(tour.date.seconds * 1000).getMinutes();
+        return `${hours % 12}:${ minutes < 10 ? minutes + '0' : minutes} ${hours < 12 ? 'am' : 'pm'}`
+    };
+
+    formatEventTitle = (tour) => {
+        if(tour) {
+            return `${this.formatTime(tour)} - ${tour.eventType}`
+        }
     };
 
     dateCellRender = (value) => {
-        const listData = this.state.personalFilter ? this.getListData(value).filter(tour => tour.guideIds.includes("Angela Liu")) : this.getListData(value);
-        return (
-            <ul className="events">
-                {listData.map(item => (
-                    <li key={item.content} onClick={(e) => {
-                        e.preventDefault();
-                        this.handleTourSelect(item)
-                    }}>
-                        <Badge status={item.type} text={item.content} />
-                    </li>
-                ))}
-            </ul>
-        );
+        let listData;
+        if(this.state.personalFilter && this.state.coverageFilter){
+            listData = this.getListData(value).filter(tour => (tour.assignedGuides.includes(this.props.auth.id)) || (tour => tour.assignedGuides.length < tour.numberOfGuidesRequested));
+        } else if(this.state.personalFilter) {
+            listData = this.getListData(value).filter(tour => tour.assignedGuides.includes(this.props.auth.uid))
+        } else if(this.state.coverageFilter){
+            listData = this.getListData(value).filter(tour => tour.assignedGuides.length < tour.numberOfGuidesRequested)
+        } else {
+            listData = this.getListData(value)
+        }
+        if(listData.length > 0) {
+            return (
+                <ul className="events">
+                    {listData.map(item => (
+                        // This boolean logic will let admins see events in the future that have not been assigned yet. Normal guides cannot see these future events until at least one guide has been assigned to them
+                        !(
+                            !this.props.profile.roles.admin
+                            && MONTHS[new Date(item.date.seconds * 1000).getMonth()] !== MONTHS[new Date(Date.now()).getMonth()]
+                            && item.assignedGuides.length === 0)
+                        && <li key={item.id} onClick={(e) => {
+                            e.preventDefault();
+                            this.handleTourSelect(item)
+                        }}>
+                            <Badge color={this.getTourBadgeStatus(item)} text={this.formatEventTitle(item)} key={item.id}/>
+                        </li>
+                    ))}
+                </ul>
+            );
+        }
+    };
+
+    getTourBadgeStatus = (item) => {
+        if (item.assignedGuides.length < item.numberOfGuidesRequested){
+            return "red"
+        } else if(item.eventType === "Group Visit") {
+            return "gold";
+        } else if(item.eventType === "Fall for Brandeis Day"){
+            return "geekblue"
+        } else {
+            return "blue";
+        }
+    };
+
+    setCurrentMonth = (value) => {
+        this.setState({
+            currentMonth: MONTHS[value.month()]
+        });
     };
 
     personalFilter = (value) => {
@@ -90,15 +123,116 @@ class TourCalendar extends Component {
         })
     };
 
+    coverageFilter = (value) => {
+        this.setState({
+            coverageFilter: value
+        })
+    };
+
     render(){
-        const {modalState, selectedTour} = this.state;
+        const {tourAssignmentModalState, selectedTour, currentMonth, addATourState} = this.state;
+        const { profile } = this.props;
+        if(!profile.isLoaded && profile.isEmpty){
+            return (
+                <DefinedRow type="flex" direction="column" height="100%" width="100%" justify="center" align="middle">
+                    <Spin size="large" />
+                    <Title>Loading</Title>
+                </DefinedRow>
+            )
+        }
         return (
             <Fragment>
-                <TourAssignmentModal tour={selectedTour} visible={modalState} onOk={this.closeModal} onCancel={this.closeModal}/>
-                <Calendar dateCellRender={this.dateCellRender} headerRender={() => <Switch onChange={this.personalFilter}></Switch>}/>
+                <AddTourModal visible={addATourState} onOk={() => this.closeModal("addATourState")} onCancel={() => this.closeModal("addATourState")}/>
+                {selectedTour && <TourAssignmentModal title={this.formatEventTitle(selectedTour)} tour={selectedTour} visible={tourAssignmentModalState} onOk={() => this.closeModal("tourAssignmentModalState")} onCancel={() => this.closeModal("tourAssignmentModalState")}/>}
+                <Calendar
+                    onPanelChange={this.setCurrentMonth}
+                    dateCellRender={this.dateCellRender}
+                    headerRender={({ value, type, onChange, onTypeChange }) => {
+                        const start = 0;
+                        const end = 12;
+                        const monthOptions = [];
+
+                        const current = value.clone();
+                        const localeData = value.localeData();
+                        const months = [];
+                        for (let i = 0; i < 12; i++) {
+                            current.month(i);
+                            months.push(localeData.monthsShort(current));
+                        }
+
+                        for (let index = start; index < end; index++) {
+                            monthOptions.push(
+                                <Select.Option key={`${index}`}>
+                                    {months[index]}
+                                </Select.Option>,
+                            );
+                        }
+                        const month = value.month();
+                        return (
+                            <Row type="flex" align="middle" justify="end">
+                                <Col span={24} style={styles.headerRow}>
+                                    <Row type="flex" justify="center">
+                                        <Title level={2}>{currentMonth} Tour Calendar</Title>
+                                    </Row>
+                                </Col>
+                                <Col span={16}>
+                                    <Row type="flex" justify="start">
+                                        <Badge color="blue" text="Admissions Tour" style={styles.headerItem}/>
+                                        <Badge color="red" text="Coverage Needed" style={styles.headerItem}/>
+                                        <Badge color="gold" text="Group Visit" style={styles.headerItem}/>
+                                        <Badge color="geekblue" text="Fall for Brandeis Day" style={styles.headerItem}/>
+                                    </Row>
+                                </Col>
+                                <Col span={8}>
+                                    <Row type="flex" align="middle" justify="end">
+                                        <Select
+                                            dropdownMatchSelectWidth={false}
+                                            value={String(month)}
+                                            onChange={selectedMonth => {
+                                                const newValue = value.clone();
+                                                newValue.month(parseInt(selectedMonth, 10));
+                                                onChange(newValue);
+                                            }}
+                                        >
+                                            {monthOptions}
+                                        </Select>
+                                    </Row>
+                                </Col>
+                                <Col span={24}>
+                                    <Row type="flex" align="middle">
+                                        {profile.roles.admin && <Col span={12} style={styles.headerRow}>
+                                            <Row type="flex" justify="start">
+                                                <Button type="primary" icon="mail" style={styles.headerItem}>Email Guides</Button>
+                                                <Button type="primary" icon="calendar" style={styles.headerItem}>Generate Calendar</Button>
+                                                <Button type="primary" icon="plus-circle" onClick={() => this.openModal("addATourState")}>Add Tour</Button>
+                                            </Row>
+                                        </Col> }
+                                        <Col push={profile.roles.admin ? 0 : 12} span={12} style={styles.headerRow}>
+                                            <Row type="flex" align="middle" justify="end">
+                                                {profile.roles.tourGuide && <div style={styles.headerItem}>My tours: <Switch onChange={this.personalFilter}></Switch></div>}
+                                                Coverage needed: <Switch onChange={this.coverageFilter}></Switch>
+                                            </Row>
+                                        </Col>
+
+                                    </Row>
+                                </Col>
+                            </Row>)
+                    }}/>
             </Fragment>
         );
     }
 };
 
-export default TourCalendar;
+const styles = {
+    headerItem: {
+        marginRight: '1em'
+    },
+    headerRow: {
+        marginTop: '1em',
+    }
+};
+
+export default compose(
+    connect(mapStateToProps, null),
+    firestoreConnect(() => [{collection: 'tours'}])
+)(TourCalendar);

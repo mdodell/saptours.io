@@ -26,7 +26,12 @@ export const registerUser = (user) => { //curly braces are implied
                     claimedTours: 0,
                     noShows: 0,
                     totalTours: 0
-                }
+                },
+                tourAvailability: {
+                    minTours: 0,
+                    maxTours: 2,
+                    activeStatus: true
+                },
             };
             await firestore.set(`users/${createdUser.user.uid}`, {...newUser});
         } catch (error) {

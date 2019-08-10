@@ -119,7 +119,8 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
         city: profile.city || '',
         minTours: profile.tourAvailability ? profile.tourAvailability.minTours : '',
         maxTours: profile.tourAvailability ? profile.tourAvailability.maxTours : '',
-        activeStatus: 'Yes'
+        activeStatus: 'Yes',
+        flexibility: 'Yes'
     };
 
     const academicInitialValues = {
@@ -187,7 +188,7 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
                         }}>{renderCurrentContent()}</div>
                     </Col>
                     <Col span={24}>
-                        <Row type="flex" align="end">
+                        <Row type="flex" justify="end">
                         <Button.Group size="large">
                             {count > 0 && <Button type="primary" onClick={() => setStep(count - 1)}>
                                 <Icon type="left" />

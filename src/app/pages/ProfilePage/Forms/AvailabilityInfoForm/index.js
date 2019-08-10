@@ -12,7 +12,7 @@ const AvailabilityInfoForm = () => {
         <Form>
             <Row type="flex" justify="space-between">
                 <Col span={24}>
-                    <Title level={4}>Personal Information</Title>
+                    <Title level={4}>Tour Availability</Title>
                 </Col>
                 <Col span={24}>
                     <Field
