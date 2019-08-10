@@ -8,6 +8,9 @@ import LoginPage from "../../pages/LoginPage";
 import NavBar from '../components/NavBar';
 import { isMobileOnly } from "react-device-detect";
 import {UserIsAuthenticated, UserIsNotAuthenticated} from "../utils/authentication";
+import moment from 'moment-timezone';
+
+moment.tz.setDefault("America/New_York");
 
 class App extends Component {
     render() {

@@ -9,7 +9,6 @@ export const PROFILE_ROUTE = "/dashboard/profile";
 export const PROFILE_EDIT_ROUTE = "/profile/edit";
 export const PROFILE_DISPLAY_ROUTE = "/profile/:id";
 
-
 // Role Constants
 export const TOUR_GUIDE = "Tour Guide";
 export const HOST = "Host";
@@ -27,7 +26,8 @@ export const POSSE = 'POSSE';
 export const MKTYP = 'MKTYP';
 export const INTERNATIONAL_STUDENT = 'International Student';
 export const LEGACY_STUDENT = 'Legacy Student';
-export const DECISION_TYPES = [ED1, ED2, REGULAR_DECISION, MIDYEAR, POSSE, MKTYP, INTERNATIONAL_STUDENT, LEGACY_STUDENT];
+export const TRANSFER_STUDENT = 'Transfer Student';
+export const DECISION_TYPES = [ED1, ED2, REGULAR_DECISION, MIDYEAR, POSSE, MKTYP, INTERNATIONAL_STUDENT, LEGACY_STUDENT, TRANSFER_STUDENT];
 
 // Data Sources
 export const MAJOR_LIST = [
@@ -340,4 +340,37 @@ export const TOUR_SHIFTS = [
     { label: "11:00 am", value: 11 },
     { label: "1:00 pm", value: 13 },
     { label: "3:00 pm", value: 15 }
+];
+
+export const TOUR_TYPES = [
+    "Admissions Tour",
+    "Group Visit",
+    "VIP Tour",
+    "Accessibility Tour",
+    "Fall for Brandeis Day"
+];
+
+export const DAYS = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+];
+
+export const MONTHS = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
 ];

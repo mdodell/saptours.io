@@ -1,4 +1,4 @@
-import {phoneRegExp} from "../../../common/constants";
+import {phoneRegExp, REGULAR_DECISION, ED1, ED2} from "../../../common/constants";
 import * as yup from "yup";
 
 export const userValidationSchema = yup.object().shape({
@@ -8,15 +8,23 @@ export const userValidationSchema = yup.object().shape({
     roles: yup.array(),
     phoneNumber: yup.string().matches(phoneRegExp, 'Phone number is not valid!').required('Required!'),
     minTours: yup.number().typeError('Minimum tours must be a number!').min(0, 'You cannot have a negative number of tours!').required('Required!'),
-    maxTours: yup.number().typeError('Maximum tours must be a number!').min(0, 'You cannot have a negative number of tours!').required('Required!').test('maxtours-greater-than-mintours', 'Maximum tours must be greater than minimum tours', function(value) {return this.parent.minTours < value }),
+    maxTours: yup.number().typeError('Maximum tours must be a number!').min(0, 'You cannot have a negative number of tours!').required('Required!').test('maxtours-greater-than-mintours', 'Maximum tours must be greater than or equal to minimum tours', function(value) {return this.parent.minTours <= value }),
     activeStatus: yup.string().required('Required!'),
+    flexibility: yup.string().required('Required!')
 });
 
 export const academicValidationSchema = yup.object().shape({
     majors: yup.array().max(3, 'You can only have a maximum of 3 majors!').required('Required!'),
     minors: yup.array().max(3, 'You can only have a maximum of 3 minors!'),
     graduationYear: yup.number().typeError('Required!').required('Required!'),
-    decisionType: yup.array().required('Required'),
+    decisionType: yup.array().required('Required').test('must-contain-admission-time-type', 'You must put in if you were only either ED1, ED2, or Regular Decision!', function(value){
+        return (value.includes(ED1) || value.includes(ED2) || value.includes(REGULAR_DECISION)) &&
+            (
+                (value.includes(ED1) && !value.includes(ED2) && !value.includes(REGULAR_DECISION)) ||
+                (value.includes(ED2) && !value.includes(ED1) && !value.includes(REGULAR_DECISION)) ||
+                (value.includes(REGULAR_DECISION) && !value.includes(ED1) && !value.includes(ED2))
+            )
+    }),
     postGraduationPlans: yup.string()
 });
 

@@ -88,7 +88,15 @@ const UserInfoForm = () => {
                             selectOptions={["Yes", "No"]}
                         />
                     </Col>
-                    <Col span={24}>
+                <Col span={7}>
+                    <Field
+                        name="flexibility"
+                        label="Can you be assigned more/less tours?"
+                        component={AntSelect}
+                        selectOptions={["Yes", "No"]}
+                    />
+                </Col>
+                    <Col span={7}>
                         <Field
                             label="Role(s)"
                             name="roles"
@@ -97,6 +105,7 @@ const UserInfoForm = () => {
                             selectOptions={[TOUR_GUIDE, CHATTER, HOST]}
                         />
                     </Col>
+                <Col span={7}></Col>
                     <Col span={24}>
                         <Button type="primary" style={styles.buttonStyle} htmlType="submit">Submit Info</Button>
                     </Col>
