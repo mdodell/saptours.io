@@ -77,6 +77,17 @@ export const MAJOR_LIST = [
     'Women\'s, Gender, and Sexuality Studies'
 ];
 
+export const DIETARY_RESTRICTIONS = [
+    "Lactose/Dairy",
+    "Vegetarian",
+    "Vegan",
+    "Nut Allergies",
+    "Diabetic",
+    "Gluten-Free",
+    "Kosher",
+    "Halal"
+];
+
 export const MINOR_LIST = [
     'African and African American Studies',
     'Anthropology',
@@ -194,6 +205,14 @@ export const CLUBS_LIST = [
     'Brandeis Law Journal Association',
     'Brandeis Men\'s Rugby Football Club',
     'Brandeis Men\'s Ultimate - TRON',
+    'Brandeis Men\'s Baseball',
+    'Brandeis Men\'s Basketball',
+    'Brandeis Men\'s Cross Country',
+    'Brandeis Men\'s Fencing',
+    'Brandeis Men\'s Soccer',
+    'Brandeis Men\'s Swimming & Dive',
+    'Brandeis Men\'s Tennis',
+    'Brandeis Men\'s Track & Field',
     'Brandeis Men\'s Volleyball Club',
     'Brandeis Official Reader\'s Guild',
     'Brandeis Organization of Sephardic Students',
@@ -233,6 +252,15 @@ export const CLUBS_LIST = [
     'Brandeis Veg Club',
     'Brandeis VoiceMale',
     'Brandeis W. Lacrosse Club',
+    'Brandeis Women\'s Basketball',
+    'Brandeis Women\'s Cross Country',
+    'Brandeis Women\'s Fencing',
+    'Brandeis Women\'s Soccer',
+    'Brandeis Women\'s Softball',
+    'Brandeis Women\'s Swimming & Dive',
+    'Brandeis Women\'s Tennis',
+    'Brandeis Women\'s Track & Field',
+    'Brandeis Women\'s Volleyball',
     'Brandeis YourStory International',
     'Brandeis esports Organization (SSBM)',
     'Brazilian Jiu Jitsu',
@@ -333,6 +361,44 @@ export const CLUBS_LIST = [
     'Women\'s Rugby',
     'Work in Progress',
     'Young Americans for Liberty'
+];
+
+export const FELLOWSHIPS_AND_SCHOLARSHIPS = [
+    'Barry M. Goldwater Scholarship',
+    'Beinecke Scholarship Program',
+    'Boren Scholarship',
+    'Brandeis International Business School (IBS) Scholars',
+    'Brandeis-Canada Endowed Scholarship',
+    'Churchill Scholarship',
+    'Critical Language Scholarship',
+    'DAAD Research Internships in Science and Engineering (RISE)',
+    'Dr. Martin Luther King Jr. Fellowship',
+    'Fulbright U.S. Student Program',
+    'George J. Mitchell Scholarship',
+    'Giumette Academic Achievement Award (GAAA)',
+    'Harry S. Truman Scholarship Foundation',
+    'Humanities Fellowship',
+    'Humanity in Action Fellowship',
+    'James C. Gaither Junior Fellows Program',
+    'Mortimer Hays-Brandeis Traveling Fellowship',
+    'Pickering Fellowship',
+    'Provost\'s Undergraduate Research Fund',
+    'QBReC Fellowship',
+    'Rangel Summer Enrichment Program',
+    'Rhodes Scholarship',
+    'Richard and Barbara Silverman Endowed Scholarship',
+    'Schiff Undergraduate Fellows Program',
+    'Schwarzman Scholars',
+    'Senior Thesis Funding',
+    'Sorensen Fellowship',
+    'Soros Fellowships',
+    'Stroum Family Waltham Scholarship',
+    'The Davis United World College Scholars Program',
+    'The Gates Cambridge Trust',
+    'The Leonard Bernstein Fellowship',
+    'The Marshall Scholarship',
+    'The Wien International Scholarship Program',
+    'Udall Scholarship'
 ];
 
 export const TOUR_SHIFTS = [

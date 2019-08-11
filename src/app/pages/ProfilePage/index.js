@@ -111,11 +111,12 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
     };
 
     const userInitialValues = {
-        firstName: profile.fullName.split(' ')[0],
-        lastName: profile.fullName.split(' ')[1],
+        fullName: profile.fullName || '',
+        highSchool: profile.highSchool || '',
         phoneNumber: profile.phoneNumber || '',
+        dietaryRestrictions: profile.dietaryRestrictions || [],
         roles: profile.roles ? populateRoles(profile.roles) : [TOUR_GUIDE],
-        birthday: moment(Date.now()),
+        birthday: moment(profile.birthday.toDate()) || moment(Date.now()),
         city: profile.city || '',
         minTours: profile.tourAvailability ? profile.tourAvailability.minTours : '',
         maxTours: profile.tourAvailability ? profile.tourAvailability.maxTours : '',
@@ -127,6 +128,7 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
         majors: profile.majors || [],
         minors: profile.minors || [],
         graduationYear: profile.graduationYear || null,
+        fellowships_scholarships: profile.fellowships_scholarships || [],
         postGraduationPlans: profile.graduationPlans || '',
         decisionType: profile.decisionType ? populateDecisionType(profile.decisionType) : []
     };

@@ -2,9 +2,10 @@ import {phoneRegExp, REGULAR_DECISION, ED1, ED2} from "../../../common/constants
 import * as yup from "yup";
 
 export const userValidationSchema = yup.object().shape({
-    firstName: yup.string().required('Required!'),
-    lastName: yup.string().required('Required!'),
+    fullName: yup.string().required('Required!'),
+    highSchool: yup.string().required('Required!'),
     birthday: yup.string().required('Required').nullable(),
+    dietaryRestrictions: yup.array(),
     roles: yup.array(),
     phoneNumber: yup.string().matches(phoneRegExp, 'Phone number is not valid!').required('Required!'),
     minTours: yup.number().typeError('Minimum tours must be a number!').min(0, 'You cannot have a negative number of tours!').required('Required!'),
@@ -16,6 +17,7 @@ export const userValidationSchema = yup.object().shape({
 export const academicValidationSchema = yup.object().shape({
     majors: yup.array().max(3, 'You can only have a maximum of 3 majors!').required('Required!'),
     minors: yup.array().max(3, 'You can only have a maximum of 3 minors!'),
+    fellowships_scholarships: yup.array(),
     graduationYear: yup.number().typeError('Required!').required('Required!'),
     decisionType: yup.array().required('Required').test('must-contain-admission-time-type', 'You must put in if you were only either ED1, ED2, or Regular Decision!', function(value){
         return (value.includes(ED1) || value.includes(ED2) || value.includes(REGULAR_DECISION)) &&

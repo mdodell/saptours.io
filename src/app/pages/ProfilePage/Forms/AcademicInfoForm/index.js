@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Field} from 'formik';
 import { Row, Col, Typography, Button } from 'antd';
 import { AntSelect, AntTextArea } from "../../../../common/components/form/AntFormik";
-import { DECISION_TYPES, MAJOR_LIST, MINOR_LIST } from "../../../../common/constants";
+import {DECISION_TYPES, FELLOWSHIPS_AND_SCHOLARSHIPS, MAJOR_LIST, MINOR_LIST} from "../../../../common/constants";
 
 const { Title } = Typography;
 
@@ -20,7 +20,7 @@ const AcademicInfoForm = () => {
         <Form>
             <Row type="flex" justify="space-between">
                 <Col span={24}>
-                    <Title level={4}>Personal Information</Title>
+                    <Title level={4}>Academic Information</Title>
                 </Col>
                 <Col span={10}>
                     <Field
@@ -62,7 +62,17 @@ const AcademicInfoForm = () => {
                 </Col>
                 <Col span={24}>
                     <Field
-                        rows={8}
+                        label="Fellowships/Scholarships"
+                        mode="multiple"
+                        placeholder="Brandeis International Business School (IBS) Scholars, QBRec Fellowship..."
+                        name="fellowships_scholarships"
+                        component={AntSelect}
+                        selectOptions={FELLOWSHIPS_AND_SCHOLARSHIPS}
+                    />
+                </Col>
+                <Col span={24}>
+                    <Field
+                        rows={5}
                         type="postGraduationPlans"
                         placeholder="Tell us about what you want to do/are planning to do after you graduate Brandeis!"
                         label="Post-Graduation Plans"

@@ -20,10 +20,13 @@ export const updateUserProfileInfo = (userForm) => {
         const user = firebase.auth().currentUser.uid;
         try {
             await firebase.updateProfile({
-                fullName: `${userForm.firstName} ${userForm.lastName}`,
+                fullName: userForm.fullName,
             });
             await firestore.update({collection: 'users', doc: user}, {
+                    fullName: userForm.fullName,
+                    highSchool: userForm.highSchool,
                     phoneNumber: userForm.phoneNumber,
+                    dietaryRestrictions: userForm.dietaryRestrictions,
                     birthday: firebase.firestore.Timestamp.fromDate(userForm.birthday.toDate()),
                     city: userForm.city,
                     tourAvailability: {
@@ -52,6 +55,7 @@ export const updateUserProfileAcademics = (academicForm) => {
                 majors: academicForm.majors,
                 minors: academicForm.minors,
                 graduationYear: academicForm.graduationYear,
+                fellowships_scholarships: academicForm.fellowships_scholarships,
                 decisionType: {
                     ED1: academicForm.decisionType.includes(ED1),
                     ED2: academicForm.decisionType.includes(ED2),

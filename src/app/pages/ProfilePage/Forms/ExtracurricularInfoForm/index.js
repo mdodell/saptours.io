@@ -15,7 +15,7 @@ const ExtracurricularInfoForm = () => {
                 </Col>
                 <Col span={24}>
                     <Field
-                        label="Clubs"
+                        label="Athletics/Clubs"
                         placeholder="TAMID, BAASA, Hillel..."
                         name="clubs"
                         mode="multiple"
