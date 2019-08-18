@@ -4,10 +4,12 @@ import {Calendar, Badge, Switch, Row, Col, Typography, Button, Spin, Select} fro
 import './index.css';
 import TourAssignmentModal from "../../../common/components/modals/TourAssignmentModal";
 import {DefinedRow} from "../../../common/components/styled";
-import {MONTHS} from "../../../common/constants";
+import {DASHBOARD_CALENDAR_ROUTE, MONTHS} from "../../../common/constants";
 import AddTourModal from "../../../common/components/modals/AddTourModal";
 import {compose} from "redux";
 import {firestoreConnect} from "react-redux-firebase";
+import {withRouter} from "react-router-dom";
+import moment from 'moment';
 
 const { Title } = Typography;
 
@@ -25,7 +27,7 @@ class TourCalendar extends Component {
         selectedTour: null,
         personalFilter: false,
         coverageFilter: false,
-        currentMonth: MONTHS[new Date().getMonth()]
+        currentMonth: MONTHS[new Date(this.props.match.params.startTime).getUTCMonth()]
     };
 
     getListData = (value)=> {
@@ -58,7 +60,7 @@ class TourCalendar extends Component {
     formatTime = (tour) => {
         const hours = new Date(tour.date.seconds * 1000).getHours();
         const minutes = new Date(tour.date.seconds * 1000).getMinutes();
-        return `${hours % 12}:${ minutes < 10 ? minutes + '0' : minutes} ${hours < 12 ? 'am' : 'pm'}`
+        return `${hours % 12 === 0 ? '12' : hours % 12}:${ minutes < 10 ? minutes + '0' : minutes} ${hours < 12 ? 'am' : 'pm'}`
     };
 
     formatEventTitle = (tour) => {
@@ -70,11 +72,11 @@ class TourCalendar extends Component {
     dateCellRender = (value) => {
         let listData;
         if(this.state.personalFilter && this.state.coverageFilter){
-            listData = this.getListData(value).filter(tour => (tour.assignedGuides.includes(this.props.auth.id)) || (tour => tour.assignedGuides.length < tour.numberOfGuidesRequested));
+            listData = this.getListData(value).filter(tour => (tour.assignedGuideIds.includes(this.props.auth.id)) || (tour => tour.assignedGuides.length < tour.numberOfGuidesRequested));
         } else if(this.state.personalFilter) {
-            listData = this.getListData(value).filter(tour => tour.assignedGuides.includes(this.props.auth.uid))
+            listData = this.getListData(value).filter(tour => tour.assignedGuideIds.includes(this.props.auth.uid))
         } else if(this.state.coverageFilter){
-            listData = this.getListData(value).filter(tour => tour.assignedGuides.length < tour.numberOfGuidesRequested)
+            listData = this.getListData(value).filter(tour => tour.assignedGuideIds.length < tour.numberOfGuidesRequested)
         } else {
             listData = this.getListData(value)
         }
@@ -83,10 +85,12 @@ class TourCalendar extends Component {
                 <ul className="events">
                     {listData.map(item => (
                         // This boolean logic will let admins see events in the future that have not been assigned yet. Normal guides cannot see these future events until at least one guide has been assigned to them
-                        !(
+                        ((!(
+                            this.props.profile.roles &&
                             !this.props.profile.roles.admin
-                            && MONTHS[new Date(item.date.seconds * 1000).getMonth()] !== MONTHS[new Date(Date.now()).getMonth()]
-                            && item.assignedGuides.length === 0)
+                            && (MONTHS[new Date(item.date.seconds * 1000).getMonth()] !== MONTHS[new Date(Date.now()).getMonth()])
+                            && !item.published
+                        ) && item.published) || this.props.profile.roles.admin)
                         && <li key={item.id} onClick={(e) => {
                             e.preventDefault();
                             this.handleTourSelect(item)
@@ -114,13 +118,13 @@ class TourCalendar extends Component {
     setCurrentMonth = (value) => {
         this.setState({
             currentMonth: MONTHS[value.month()]
-        });
+        }, this.props.history.push(`${DASHBOARD_CALENDAR_ROUTE}/${value.startOf('month').format('YYYY-MM-DD')}/${value.endOf('month').format('YYYY-MM-DD')}`));
     };
 
     personalFilter = (value) => {
         this.setState({
             personalFilter: value
-        })
+        });
     };
 
     coverageFilter = (value) => {
@@ -132,7 +136,7 @@ class TourCalendar extends Component {
     render(){
         const {tourAssignmentModalState, selectedTour, currentMonth, addATourState} = this.state;
         const { profile } = this.props;
-        if(!profile.isLoaded && profile.isEmpty){
+        if(!profile.isLoaded && profile.isEmpty && !profile.roles){
             return (
                 <DefinedRow type="flex" direction="column" height="100%" width="100%" justify="center" align="middle">
                     <Spin size="large" />
@@ -147,6 +151,7 @@ class TourCalendar extends Component {
                 <Calendar
                     onPanelChange={this.setCurrentMonth}
                     dateCellRender={this.dateCellRender}
+                    value={(moment(this.props.match.params.startTime))}
                     headerRender={({ value, type, onChange, onTypeChange }) => {
                         const start = 0;
                         const end = 12;
@@ -200,16 +205,16 @@ class TourCalendar extends Component {
                                 </Col>
                                 <Col span={24}>
                                     <Row type="flex" align="middle">
-                                        {profile.roles.admin && <Col span={12} style={styles.headerRow}>
+                                        {profile.roles && profile.roles.admin && <Col span={12} style={styles.headerRow}>
                                             <Row type="flex" justify="start">
                                                 <Button type="primary" icon="mail" style={styles.headerItem}>Email Guides</Button>
                                                 <Button type="primary" icon="calendar" style={styles.headerItem}>Generate Calendar</Button>
                                                 <Button type="primary" icon="plus-circle" onClick={() => this.openModal("addATourState")}>Add Tour</Button>
                                             </Row>
                                         </Col> }
-                                        <Col push={profile.roles.admin ? 0 : 12} span={12} style={styles.headerRow}>
+                                        <Col push={profile.roles && profile.roles.admin ? 0 : 12} span={12} style={styles.headerRow}>
                                             <Row type="flex" align="middle" justify="end">
-                                                {profile.roles.tourGuide && <div style={styles.headerItem}>My tours: <Switch onChange={this.personalFilter}></Switch></div>}
+                                                {profile.roles && profile.roles.tourGuide && <div style={styles.headerItem}>My tours: <Switch onChange={this.personalFilter}></Switch></div>}
                                                 Coverage needed: <Switch onChange={this.coverageFilter}></Switch>
                                             </Row>
                                         </Col>
@@ -233,6 +238,13 @@ const styles = {
 };
 
 export default compose(
+    withRouter,
     connect(mapStateToProps, null),
-    firestoreConnect(() => [{collection: 'tours'}])
+    firestoreConnect((props) => [{
+        collection: 'tours',
+        where: [
+            ['date', '>=', new Date(props.match.params.startTime)],
+            ['date', '<=', new Date(props.match.params.endTime)]
+        ]
+    }])
 )(TourCalendar);

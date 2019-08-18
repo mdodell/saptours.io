@@ -15,6 +15,7 @@ export const registerUser = (user) => { //curly braces are implied
             let newUser = {
                 fullName: `${user.firstName} ${user.lastName}`,
                 email: user.email,
+                phoneNumber: '',
                 roles: {
                     tourGuide: user.role.includes(TOUR_GUIDE),
                     host: user.role.includes(HOST),

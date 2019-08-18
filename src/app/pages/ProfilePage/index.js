@@ -92,7 +92,6 @@ const populateDecisionType = (decisionTypes) => {
 };
 
 const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInfo, updateUserProfileAcademics, updateUserProfileExtracurriculars, updateUserProfileAvailability}) => {
-
     const [count, setStep] = useState(0);
     if(!profile.isLoaded && profile.isEmpty){
         return (
@@ -116,7 +115,7 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
         phoneNumber: profile.phoneNumber || '',
         dietaryRestrictions: profile.dietaryRestrictions || [],
         roles: profile.roles ? populateRoles(profile.roles) : [TOUR_GUIDE],
-        birthday: moment(profile.birthday.toDate()) || moment(Date.now()),
+        birthday: profile.birthday ? moment(profile.birthday.toDate()) : moment(Date.now()),
         city: profile.city || '',
         minTours: profile.tourAvailability ? profile.tourAvailability.minTours : '',
         maxTours: profile.tourAvailability ? profile.tourAvailability.maxTours : '',
@@ -211,5 +210,5 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
 
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
-    firestoreConnect((props) => [{collection: 'tourAvailability', where: ['guides', 'array-contains', props.match.params.id]}])
+    firestoreConnect((props) => [{collection: 'tourAvailability', where: ['guideIds', 'array-contains', props.match.params.id]}])
 )(ProfilePage);
