@@ -31,7 +31,6 @@ export const createTour = (tourForm) => {
                         availableGuides: !availability.empty ? availability.docs[0].data().guides : [],
                         assignedGuideIds: [],
                         assignedGuides: [],
-                        googleCalendarId: '',
                         published: false
                     });
                 }
