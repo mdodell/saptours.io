@@ -34,6 +34,7 @@ class App extends Component {
                     pathname: ERROR_ROUTE,
                     state: {messages: ["This website is not friendly on mobile!"]}
                 }} /> }
+                <Route component={() => <ErrorPage messages={["This page does not exist!"]} />} />
             </Fragment>
 
         );
