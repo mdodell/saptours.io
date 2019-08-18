@@ -3,11 +3,12 @@ export const HOME_ROUTE = "/";
 export const LOGIN_ROUTE = "/login";
 export const DASHBOARD_ROUTE = "/dashboard";
 export const DASHBOARD_CALENDAR_ROUTE = "/dashboard/calendar";
+export const DASHBOARD_CALENDAR_ROUTE_WITH_PARAMS = "/dashboard/calendar/:startTime/:endTime"
 export const ERROR_ROUTE = "/error";
 export const USER_TABLE_ROUTE = "/dashboard/user-table";
 export const PROFILE_ROUTE = "/dashboard/profile";
 export const PROFILE_EDIT_ROUTE = "/profile/edit";
-export const PROFILE_DISPLAY_ROUTE = "/profile/:id";
+export const PROFILE_DISPLAY_ROUTE = "/dashboard/profile/:id";
 
 // Role Constants
 export const TOUR_GUIDE = "Tour Guide";

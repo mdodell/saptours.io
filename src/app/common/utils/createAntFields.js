@@ -21,7 +21,9 @@ export const CreateAntField = AntComponent => ({
     const touchedError = hasError && touched;
     const onInputChange = ({ target: { value } }) =>
         form.setFieldValue(field.name, value);
-    const onChange = value => form.setFieldValue(field.name, value);
+    const onChange = value => {
+        form.setFieldValue(field.name, value);
+    };
     const onBlur = () => form.setFieldTouched(field.name, true);
     return (
         <div>
@@ -40,7 +42,7 @@ export const CreateAntField = AntComponent => ({
                     onChange={type ? onInputChange : onChange}
                 >
                     {selectOptions &&
-                    selectOptions.map(name => <Option key={name}>{name}</Option>)}
+                    selectOptions.map(name => <Option key={name.key || name}>{name.label || name}</Option>)}
                 </AntComponent>
             </FormItem>
         </div>
