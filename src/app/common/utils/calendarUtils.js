@@ -62,7 +62,7 @@ export const downloadToursToICal = (tours, auth) => {
             const hours = date.getHours();
             const minutes = date.getMinutes();
             events.push({
-                start: [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours() === 0 ? 23 : date.getHours() - 1, date.getMinutes() + 50], // make it start 10 minutes before the tour
+                start: [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes()], // make it start 10 minutes before the tour
                 duration: {hours: 1, minutes: 25},
                 title: `${hours % 12 === 0 ? '12' : hours % 12}:${ minutes < 10 ? minutes + '0' : minutes} ${hours < 12 ? 'am' : 'pm'} - ${tour.eventType}`,
                 description: buildCalendarDescription(tour, '\n'),

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Route, Switch, withRouter, Redirect } from "react-router-dom";
-import {HOME_ROUTE, LOGIN_ROUTE, DASHBOARD_ROUTE, ERROR_ROUTE} from '../constants';
+import {HOME_ROUTE, LOGIN_ROUTE, DASHBOARD_ROUTE, ERROR_ROUTE, MONTHS} from '../constants';
 import HomePage from "../../pages/HomePage";
 import ErrorPage from "../../pages/ErrorPage";
 import DashboardPage from "../../pages/DashboardPage";
@@ -13,6 +13,7 @@ import moment from 'moment-timezone';
 moment.tz.setDefault("America/New_York");
 
 class App extends Component {
+
     render() {
         return (
             <Fragment>
@@ -24,7 +25,7 @@ class App extends Component {
                             <NavBar/>
                             <Switch key={this.props.location.key}>
                                 <Route exact path={LOGIN_ROUTE} component={UserIsNotAuthenticated(LoginPage)}/>
-                                <Route path={DASHBOARD_ROUTE} component={UserIsAuthenticated(DashboardPage)}/>
+                                <Route strict path={DASHBOARD_ROUTE} component={UserIsAuthenticated(DashboardPage)}/>
                                 <Route exact path={ERROR_ROUTE} component={ErrorPage}/>
                             </Switch>
                         </Fragment>
