@@ -10,7 +10,7 @@ export const registerUser = (user) => { //curly braces are implied
                 .auth()
                 .createUserWithEmailAndPassword(user.email, user.passwordOne);
             await createdUser.user.updateProfile({
-                displayName: user.firstName
+                displayName: user.firstName + user.lastName
             });
             let newUser = {
                 fullName: `${user.firstName} ${user.lastName}`,
@@ -31,7 +31,8 @@ export const registerUser = (user) => { //curly braces are implied
                 tourAvailability: {
                     minTours: 0,
                     maxTours: 2,
-                    activeStatus: true
+                    activeStatus: true,
+                    flexibility: true
                 },
             };
             await firestore.set(`users/${createdUser.user.uid}`, {...newUser});

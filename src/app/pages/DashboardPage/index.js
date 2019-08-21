@@ -23,8 +23,7 @@ const DashboardPage = () => {
                 <Layout>
                     <Content style={{ margin: '0 16px' }}>
                         <Switch>
-                            <Redirect exact from={DASHBOARD_ROUTE} to={DASHBOARD_CALENDAR_ROUTE} />
-                            <Redirect exact from={DASHBOARD_CALENDAR_ROUTE} to={`${DASHBOARD_CALENDAR_ROUTE}/${moment().startOf('month').format('YYYY-MM-DD')}/${moment().endOf('month').format('YYYY-MM-DD')}`} />
+                            <Redirect exact from={DASHBOARD_ROUTE} to={`${DASHBOARD_CALENDAR_ROUTE}/${moment().startOf('month').format('YYYY-MM-DD')}/${moment().endOf('month').format('YYYY-MM-DD')}`} />
                             <Route path={DASHBOARD_CALENDAR_ROUTE_WITH_PARAMS} component={TourCalendar} />
                             <Route path={USER_TABLE_ROUTE} component={UserTable} />
                             <Route path={PROFILE_DISPLAY_ROUTE} component={ProfilePage} />

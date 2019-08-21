@@ -29,6 +29,7 @@ export const updateUserProfileInfo = (userForm) => {
                     dietaryRestrictions: userForm.dietaryRestrictions,
                     birthday: firebase.firestore.Timestamp.fromDate(userForm.birthday.toDate()),
                     city: userForm.city,
+                    state: userForm.state,
                     tourAvailability: {
                         minTours: Number(userForm.minTours),
                         maxTours: Number(userForm.maxTours),

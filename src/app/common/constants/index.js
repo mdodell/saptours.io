@@ -16,7 +16,7 @@ export const HOST = "Host";
 export const CHATTER = "Chatter";
 
 // Regex
-export const phoneRegExp = /^((\\,[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+export const phoneRegExp = /\d{10}/;
 
 // Decision Types
 export const ED1 = 'ED1';
@@ -414,7 +414,8 @@ export const TOUR_TYPES = [
     "Group Visit",
     "VIP Tour",
     "Accessibility Tour",
-    "Fall for Brandeis Day"
+    "Fall for Brandeis Day",
+    "Counselor Tour"
 ];
 
 export const DAYS = [

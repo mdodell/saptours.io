@@ -45,8 +45,8 @@ const ExtracurricularInfoForm = () => {
                 </Col>
                 <Col span={24}>
                     <Field
-                        label="Internships"
-                        placeholder="DICK's Sporting Goods, EMD Serono, Disney..."
+                        label="Internships/Study Abroad"
+                        placeholder="DICK's Sporting Goods, EMD Serono, Disney, Brandeis in Copenhagen: Business and Economics in Denmark..."
                         type="internships"
                         name="internships"
                         component={AntTextArea}

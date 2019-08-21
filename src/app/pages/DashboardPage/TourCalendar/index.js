@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import { connect } from 'react-redux';
-import {Calendar, Badge, Switch, Row, Col, Typography, Button, Spin, Select} from 'antd';
+import {Calendar, Badge, Switch, Row, Col, Typography, Button, Spin, Select, Dropdown, Menu} from 'antd';
 import './index.css';
 import TourAssignmentModal from "../../../common/components/modals/TourAssignmentModal";
 import {DefinedRow} from "../../../common/components/styled";
@@ -10,6 +10,7 @@ import {compose} from "redux";
 import {firestoreConnect} from "react-redux-firebase";
 import {withRouter} from "react-router-dom";
 import moment from 'moment';
+import {downloadToursToGoogleCalendar, downloadToursToICal} from "../../../common/utils/calendarUtils";
 
 const { Title } = Typography;
 
@@ -135,7 +136,8 @@ class TourCalendar extends Component {
 
     render(){
         const {tourAssignmentModalState, selectedTour, currentMonth, addATourState} = this.state;
-        const { profile } = this.props;
+        const { profile, tours, auth } = this.props;
+
         if(!profile.isLoaded && profile.isEmpty && !profile.roles){
             return (
                 <DefinedRow type="flex" direction="column" height="100%" width="100%" justify="center" align="middle">
@@ -205,14 +207,32 @@ class TourCalendar extends Component {
                                 </Col>
                                 <Col span={24}>
                                     <Row type="flex" align="middle">
-                                        {profile.roles && profile.roles.admin && <Col span={12} style={styles.headerRow}>
+                                        <Col span={18} style={styles.headerRow}>
                                             <Row type="flex" justify="start">
-                                                <Button type="primary" icon="mail" style={styles.headerItem}>Email Guides</Button>
-                                                <Button type="primary" icon="calendar" style={styles.headerItem}>Generate Calendar</Button>
-                                                <Button type="primary" icon="plus-circle" onClick={() => this.openModal("addATourState")}>Add Tour</Button>
+                                                {profile.roles && profile.roles.admin &&
+                                                    <Fragment>
+                                                        <Button type="primary" icon="mail" style={styles.headerItem}>Email Guides</Button>
+                                                        <Button type="primary" icon="calendar" style={styles.headerItem} onClick={() => {
+
+                                                        }}>Generate Calendar</Button>
+                                                            <Button type="primary" icon="plus-circle" onClick={() => this.openModal("addATourState")} style={styles.headerItem}>Add Tour</Button>
+                                                    </Fragment>
+                                                }
+                                                {profile.roles && profile.roles.tourGuide &&
+                                                    <Fragment>
+                                                        <Dropdown overlay={
+                                                            <Menu>
+                                                                <Menu.Item key="1" onClick={() => downloadToursToICal(tours, auth)}>Download to iCalendar</Menu.Item>
+                                                                <Menu.Item key="2" onClick={() => downloadToursToGoogleCalendar(tours, auth)}>Download to Google Calendar</Menu.Item>
+                                                        </Menu>
+                                                        }>
+                                                            <Button type="primary" icon="calendar" style={styles.headerItem}>Download to Calendar</Button>
+                                                        </Dropdown>
+                                                    </Fragment>
+                                                }
                                             </Row>
-                                        </Col> }
-                                        <Col push={profile.roles && profile.roles.admin ? 0 : 12} span={12} style={styles.headerRow}>
+                                        </Col>
+                                        <Col span={6} style={styles.headerRow}>
                                             <Row type="flex" align="middle" justify="end">
                                                 {profile.roles && profile.roles.tourGuide && <div style={styles.headerItem}>My tours: <Switch onChange={this.personalFilter}></Switch></div>}
                                                 Coverage needed: <Switch onChange={this.coverageFilter}></Switch>

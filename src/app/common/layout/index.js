@@ -23,9 +23,9 @@ class App extends Component {
                         <Fragment>
                             <NavBar/>
                             <Switch key={this.props.location.key}>
-                                <Route path={LOGIN_ROUTE} component={UserIsNotAuthenticated(LoginPage)}/>
+                                <Route exact path={LOGIN_ROUTE} component={UserIsNotAuthenticated(LoginPage)}/>
                                 <Route path={DASHBOARD_ROUTE} component={UserIsAuthenticated(DashboardPage)}/>
-                                <Route path={ERROR_ROUTE} component={ErrorPage}/>
+                                <Route exact path={ERROR_ROUTE} component={ErrorPage}/>
                             </Switch>
                         </Fragment>
                     )}
