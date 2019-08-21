@@ -1,7 +1,7 @@
 import React from 'react';
 import {Field, Form} from "formik";
 import {Row, Col, Icon, Typography, Button} from 'antd';
-import {AntDatePicker, AntInput, AntSelect} from "../../../../common/components/form/AntFormik";
+import {AntDatePicker, AntInput, AntInputNumber, AntSelect} from "../../../../common/components/form/AntFormik";
 import {CHATTER, DIETARY_RESTRICTIONS, HOST, TOUR_GUIDE} from "../../../../common/constants";
 const { Title } = Typography;
 
@@ -36,7 +36,7 @@ const UserInfoForm = () => {
                         name="phoneNumber"
                         type="phoneNumber"
                         prefix={<Icon type="phone" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                        placeholder="012-345-6789"
+                        placeholder="0123456789"
                         label="Phone Number"
                     />
                 </Col>
@@ -45,8 +45,17 @@ const UserInfoForm = () => {
                         component={AntInput}
                         name="city"
                         type="city"
-                        placeholder="Home City"
-                        label="City"
+                        placeholder="Scottsdale, New York City, Los Angeles..."
+                        label="Home City"
+                    />
+                </Col>
+                <Col span={7}>
+                    <Field
+                        component={AntInput}
+                        name="state"
+                        type="state"
+                        placeholder="Arizona, New York, California..."
+                        label="Home State"
                     />
                 </Col>
                 <Col span={7}>
@@ -58,10 +67,10 @@ const UserInfoForm = () => {
                         label="High School"
                     />
                 </Col>
-                <Col span={7}>
+                <Col span={24}>
                     <Field
                         name="dietaryRestrictions"
-                        label="Dietary Restrictions"
+                        label="Dietary Restrictions (not preferences):"
                         mode="multiple"
                         component={AntSelect}
                         selectOptions={DIETARY_RESTRICTIONS}
@@ -73,19 +82,17 @@ const UserInfoForm = () => {
                 <Col span={7}>
                     <Field
                         name="minTours"
-                        type="minTours"
                         placeholder="0"
                         label="Minimum tours per month"
-                        component={AntInput}
+                        component={AntInputNumber}
                     />
                 </Col>
                 <Col span={7}>
                     <Field
                         name="maxTours"
-                        type="maxTours"
                         placeholder="0"
                         label="Maximum tours per month"
-                        component={AntInput}
+                        component={AntInputNumber}
                     />
                 </Col>
                 <Col span={7}>

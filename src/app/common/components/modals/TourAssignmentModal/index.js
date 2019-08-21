@@ -88,7 +88,7 @@ render(){
                     <div>
                         Please show up to your tour 15 minutes before the
                         tour! {tour.assignedGuides.length === 1 ? 'The person giving' : 'The tour guides giving'} this
-                        tour will be: {tour.assignedGuides ? <ul>{mapGuides(tour.assignedGuides)}</ul> : ''}.
+                        tour will be: {tour.assignedGuides ? <ul>{mapGuides(tour.assignedGuides)}</ul> : ''}. {tour.description}
                     </div>
                 }
             </Modal>

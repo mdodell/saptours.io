@@ -9,17 +9,19 @@ import {numberOfToursInMonth} from "../../../../../utils/calendarUtils";
 
 const mapDispatchToProps = {
     deleteTour
-}
+};
 
 const EditTourForm = ({tour, deleteTour, onOk, tours}) => {
 
     const tourGuideSelect = (tour, tours) => {
         let tourSelectOptions = [];
         tour.availableGuides.forEach(guide => {
-            tourSelectOptions.push({key: guide.id, label: `${guide.user.fullName} - Assigned: ${numberOfToursInMonth(tours, guide.id)}, Min: ${guide.user.tourAvailability.minTours}, Max: ${guide.user.tourAvailability.maxTours}, Flexible: ${guide.user.tourAvailability.flexibility ? 'Yes' : 'No'}`});
+            if(guide.user.tourAvailability.activeStatus){
+                tourSelectOptions.push({key: guide.id, label: `${guide.user.fullName} - Assigned: ${numberOfToursInMonth(tours, guide.id)}, Min: ${guide.user.tourAvailability.minTours}, Max: ${guide.user.tourAvailability.maxTours}, Flexible: ${guide.user.tourAvailability.flexibility ? 'Yes' : 'No'}`});
+            }
         });
         tour.assignedGuides.forEach(guide => {
-           if(!tourSelectOptions.some(e => e.key === guide.id)){
+           if(!tourSelectOptions.some(e => e.key === guide.id) && guide.user.tourAvailability.activeStatus){
                tourSelectOptions.push({key: guide.id, label: `${guide.user.fullName} - Assigned: ${numberOfToursInMonth(tours, guide.id)}, Min: ${guide.user.tourAvailability.minTours}, Max: ${guide.user.tourAvailability.maxTours}, Flexible: ${guide.user.tourAvailability.flexibility ? 'Yes' : 'No'}`});
            }
         });

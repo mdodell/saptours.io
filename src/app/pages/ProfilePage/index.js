@@ -117,10 +117,11 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
         roles: profile.roles ? populateRoles(profile.roles) : [TOUR_GUIDE],
         birthday: profile.birthday ? moment(profile.birthday.toDate()) : moment(Date.now()),
         city: profile.city || '',
+        state: profile.state || '',
         minTours: profile.tourAvailability ? profile.tourAvailability.minTours : '',
         maxTours: profile.tourAvailability ? profile.tourAvailability.maxTours : '',
-        activeStatus: 'Yes',
-        flexibility: 'Yes'
+        activeStatus: profile.tourAvailability ? profile.tourAvailability.activeStatus ? 'Yes' : 'No' : '',
+        flexibility: profile.tourAvailability ? profile.tourAvailability.flexibility ? 'Yes' : 'No' : '',
     };
 
     const academicInitialValues = {
@@ -180,7 +181,7 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
                             <Step icon={<Icon type="user" onClick={() => setStep(0)}/>} title="User Info" />
                             <Step icon={<Icon type="book" onClick={() => setStep(1)}/>} title="Academic" />
                             <Step icon={<Icon type="smile" onClick={() => setStep(2)}/>} title="Extracurricular" />
-                            <Step icon={<Icon type="clock-circle" onClick={() => setStep(3)}/>} title="Availability" />
+                            {profile.tourAvailability.activeStatus && <Step icon={<Icon type="clock-circle" onClick={() => setStep(3)}/>} title="Availability" /> }
                         </Steps>
                     </Col>
                     <Col span={24}>
@@ -195,7 +196,7 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
                                 <Icon type="left" />
                                 Previous
                             </Button>}
-                            {count < 3 && <Button type="primary" onClick={() => setStep(count + 1)}>
+                            {count < (profile.tourAvailability.activeStatus ? 3 : 2) && <Button type="primary" onClick={() => setStep(count + 1)}>
                                 Next
                                 <Icon type="right" />
                             </Button> }

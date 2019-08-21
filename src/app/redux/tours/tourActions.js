@@ -15,14 +15,12 @@ export const createTour = (tourForm) => {
                 where: [['day', '==',  DAYS[tourForm.date.day()]], ['hour', '==', tourForm.time.hour()]]
             }).then(availability => {
                 for(let i = 0; i <= tourForm.repeatFor; i++ ){
-                    let date = moment(tourForm.date.set({
+                    const date = moment((tourForm.date.clone()).set({
                         h: tourForm.time.hour(),
                         m: tourForm.time.minute(),
                         s: tourForm.time.second()
                     }));
-                    if(i !== 0 ){
-                        date.add(7, 'days')
-                    }
+                    date.add(7 * i , 'days')
                     firestore.add('tours', {
                         eventType: tourForm.eventType,
                         numberOfGuidesRequested: tourForm.numberOfGuides,
@@ -112,7 +110,7 @@ const updateGuidesInTour = (tourForm, firestore, firebase, tour, date) => {
             })
         }
     }
-}
+};
 
 export const updateTour = (tourForm, tour) => {
     return async (dispatch, getState, { getFirebase, getFirestore }) => {
