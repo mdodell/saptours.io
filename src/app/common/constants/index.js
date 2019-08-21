@@ -1,6 +1,8 @@
 // Route Constants
 export const HOME_ROUTE = "/";
 export const LOGIN_ROUTE = "/login";
+export const FORGOT_PASSWORD_ROUTE = "/forgot-password";
+export const UPDATE_PASSWORD_ROUTE = "/update-password";
 export const DASHBOARD_ROUTE = "/dashboard";
 export const DASHBOARD_CALENDAR_ROUTE = "/dashboard/calendar";
 export const DASHBOARD_CALENDAR_ROUTE_WITH_PARAMS = "/dashboard/calendar/:startTime/:endTime"

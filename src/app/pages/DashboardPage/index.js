@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import { Layout } from 'antd';
-import { Redirect, Route, Switch, withRouter } from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import SideNav from "../../common/components/SideNav";
 import TourCalendar from "./TourCalendar";
 import {

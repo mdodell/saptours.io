@@ -2,7 +2,8 @@ import React from 'react';
 import { Row, Col, Button } from 'antd';
 import { Field, Form } from "formik";
 import { AntInput, AntPassword, AntSelect } from "../../../../common/components/form/AntFormik";
-import {TOUR_GUIDE, CHATTER, HOST} from "../../../../common/constants";
+import {TOUR_GUIDE, CHATTER, HOST, FORGOT_PASSWORD_ROUTE} from "../../../../common/constants";
+import {Link} from "react-router-dom";
 
 const SignUp = ({ initialValues }) => {
     return (
@@ -64,7 +65,18 @@ const SignUp = ({ initialValues }) => {
                         />
                     </Col>
                     <Col span={24}>
-                        <Button style={styles.buttonStyle} type="primary" htmlType="submit">Sign Up</Button>
+                        <Row type="flex" justify="start" gutter={16}>
+                            <Col>
+                                <Button style={styles.buttonStyle} type="primary" htmlType="submit" icon="user-add">Sign Up</Button>
+                            </Col>
+                            <Col>
+                                <Link to={FORGOT_PASSWORD_ROUTE}>
+                                <Button style={styles.buttonStyle} type="danger" icon="question-circle">
+                                        Forgot Password
+                                </Button>
+                                </Link>
+                            </Col>
+                        </Row>
                     </Col>
                 </Form>
             </Row>
