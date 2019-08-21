@@ -1,4 +1,4 @@
-import React, {Component, useState} from 'react';
+import React, { useState } from 'react';
 import {Layout, Menu, Icon} from 'antd';
 import {Link, withRouter} from "react-router-dom";
 import {DASHBOARD_CALENDAR_ROUTE, DASHBOARD_ROUTE, PROFILE_ROUTE, USER_TABLE_ROUTE} from "../../constants";

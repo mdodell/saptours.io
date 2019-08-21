@@ -52,3 +52,38 @@ export const login = (creds) => {
         }
     };
 };
+
+export const forgotPassword = (email) => {
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = getFirebase();
+        try {
+            await firebase.auth().sendPasswordResetEmail(email)
+                .then(() => {
+                    openNotification('success', 'bottomRight', 'Success', 'You should be receiving a password reset email soon!', 3)
+                })
+        } catch (error) {
+            openNotification('error', 'bottomRight', 'Error', error.message, 3);
+        }
+    };
+};
+
+export const updatePassword = (updatePasswordForm) => {
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = getFirebase();
+        const user = firebase.auth().currentUser;
+        const credential = firebase.auth.EmailAuthProvider.credential(
+            user.email,
+            updatePasswordForm.oldPassword
+        );
+        try {
+            await firebase.auth().currentUser.reauthenticateWithCredential(credential)
+                .then(() => {
+                    user.updatePassword(updatePasswordForm.newPassword).then(() => {
+                        openNotification('success', 'bottomRight', 'Success', 'Your password has been updated!', 3)
+                    });
+                })
+        } catch (error) {
+            openNotification('error', 'bottomRight', 'Error', error.message, 3);
+        }
+    };
+};
