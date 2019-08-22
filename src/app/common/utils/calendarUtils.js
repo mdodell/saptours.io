@@ -14,19 +14,22 @@ export const numberOfToursInMonth = (tours, guideId) => {
 
 export const downloadToursToGoogleCalendar = (tours, auth) => {
     let userTours = tours.filter(tour => tour.assignedGuideIds.includes(auth.uid));
-    //https://www.google.com/calendar/render?action=TEMPLATE&text=Your+Event+Name&dates=20140127T224000Z/20140320T221500Z&details=For+details,+link+here:+http://www.example.com&location=Waldorf+Astoria,+301+Park+Ave+,+New+York,+NY+10022&sf=true&output=xml
-    userTours.forEach(tour => {
-        const date = new Date(tour.date.seconds * 1000);
-        const hours = date.getHours();
-        const minutes = date.getMinutes();
-        const startTime = date.toISOString().replace(/-|:|\.\d\d\d/g,"");
-        let finishTime = new Date(moment(tour.date.seconds * 1000).add(75, 'minutes')).toISOString().replace(/-|:|\.\d\d\d/g,"");
-        let tourString = 'https://www.google.com/calendar/render?action=TEMPLATE';
-        tourString += `&text=${hours % 12 === 0 ? '12' : hours % 12}:${ minutes < 10 ? minutes + '0' : minutes} ${hours < 12 ? 'am' : 'pm'} - ${tour.eventType}`;
-        tourString += `&dates=${startTime}/${finishTime}`;
-        tourString += `&details=${buildCalendarDescription(tour, '<br>')}&location=415 South St, Waltham, MA 02453&sf=true&output=xml`;
-        window.open(tourString);
-    })
+    if(userTours.length === 0) {
+        openNotification('error', 'bottomRight', 'Error', 'You have not been assigned any tours for this month!', 3)
+    } else {
+        userTours.forEach(tour => {
+            const date = new Date(tour.date.seconds * 1000);
+            const hours = date.getHours();
+            const minutes = date.getMinutes();
+            const startTime = date.toISOString().replace(/-|:|\.\d\d\d/g,"");
+            let finishTime = new Date(moment(tour.date.seconds * 1000).add(75, 'minutes')).toISOString().replace(/-|:|\.\d\d\d/g,"");
+            let tourString = 'https://www.google.com/calendar/render?action=TEMPLATE';
+            tourString += `&text=${hours % 12 === 0 ? '12' : hours % 12}:${ minutes < 10 ? minutes + '0' : minutes} ${hours < 12 ? 'am' : 'pm'} - ${tour.eventType}`;
+            tourString += `&dates=${startTime}/${finishTime}`;
+            tourString += `&details=${buildCalendarDescription(tour, '<br>')}&location=415 South St, Waltham, MA 02453&sf=true&output=xml`;
+            window.open(tourString);
+        })
+    }
 };
 
 const buildCalendarDescription = (tour, newLine) => {
@@ -39,50 +42,55 @@ const buildCalendarDescription = (tour, newLine) => {
 };
 
 export const downloadToursToICal = (tours, auth) => {
-    let alarms = [];
-    let events = [];
     let userTours = tours.filter(tour => tour.assignedGuideIds.includes(auth.uid));
-    alarms.push({
-        action: 'audio',
-        trigger: {hours: 24, minutes: 0, before: true},
-        repeat: 2,
-        attachType:'VALUE=URI',
-        attach: 'Glass'
-    });
-    alarms.push({
-        action: 'audio',
-        trigger: {hours: 1, minutes: 0, before: true},
-        repeat: 2,
-        attachType:'VALUE=URI',
-        attach: 'Glass'
-    });
+    if (userTours.length === 0) {
+        openNotification('error', 'bottomRight', 'Error', 'You have not been assigned any tours for this month!', 3)
 
-    userTours.forEach(tour => {
-            let date = new Date(tour.date.seconds * 1000);
-            const hours = date.getHours();
-            const minutes = date.getMinutes();
-            events.push({
-                start: [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes()], // make it start 10 minutes before the tour
-                duration: {hours: 1, minutes: 25},
-                title: `${hours % 12 === 0 ? '12' : hours % 12}:${ minutes < 10 ? minutes + '0' : minutes} ${hours < 12 ? 'am' : 'pm'} - ${tour.eventType}`,
-                description: buildCalendarDescription(tour, '\n'),
-                location: 'Shapiro Admissions Center, Brandeis University',
-                url: 'https://saptours-a24d1.firebaseapp.com', // TODO: Change this url when the application is officially deployed
-                status: 'CONFIRMED',
-                organizer: { name: 'Brandeis Undergraduate Admissions', email: 'brandeissap@gmail.com'},
-                alarms: alarms,
-                attendees: [{
-                    name: auth.displayName,
-                    email: auth.email
-                }],
-                geo: {lat: 42.365843, lon: -71.260153}
-            });
-        }
-    );
-    const {error, value } = createEvents(events);
-    if(error){
-        openNotification('error', 'bottomRight', 'Error', error.message, 3);
     } else {
-        window.open("data:text/calendar;charset=utf8," + encodeURI(value));
+        let alarms = [];
+        let events = [];
+        alarms.push({
+            action: 'audio',
+            trigger: {hours: 24, minutes: 0, before: true},
+            repeat: 2,
+            attachType: 'VALUE=URI',
+            attach: 'Glass'
+        });
+        alarms.push({
+            action: 'audio',
+            trigger: {hours: 1, minutes: 0, before: true},
+            repeat: 2,
+            attachType: 'VALUE=URI',
+            attach: 'Glass'
+        });
+
+        userTours.forEach(tour => {
+                let date = new Date(tour.date.seconds * 1000);
+                const hours = date.getHours();
+                const minutes = date.getMinutes();
+                events.push({
+                    start: [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes()], // make it start 10 minutes before the tour
+                    duration: {hours: 1, minutes: 25},
+                    title: `${hours % 12 === 0 ? '12' : hours % 12}:${ minutes < 10 ? minutes + '0' : minutes} ${hours < 12 ? 'am' : 'pm'} - ${tour.eventType}`,
+                    description: buildCalendarDescription(tour, '\n'),
+                    location: 'Shapiro Admissions Center, Brandeis University',
+                    url: 'https://saptours-a24d1.firebaseapp.com', // TODO: Change this url when the application is officially deployed
+                    status: 'CONFIRMED',
+                    organizer: {name: 'Brandeis Undergraduate Admissions', email: 'brandeissap@gmail.com'},
+                    alarms: alarms,
+                    attendees: [{
+                        name: auth.displayName,
+                        email: auth.email
+                    }],
+                    geo: {lat: 42.365843, lon: -71.260153}
+                });
+            }
+        );
+        const {error, value} = createEvents(events);
+        if (error) {
+            openNotification('error', 'bottomRight', 'Error', error.message, 3);
+        } else {
+            window.open("data:text/calendar;charset=utf8," + encodeURI(value));
+        }
     }
 };
