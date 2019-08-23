@@ -11,6 +11,7 @@ import {firestoreConnect} from "react-redux-firebase";
 import {withRouter} from "react-router-dom";
 import moment from 'moment';
 import {downloadToursToGoogleCalendar, downloadToursToICal} from "../../../common/utils/calendarUtils";
+import {publishAllToursInRange} from "../../../redux/tours/tourActions";
 
 const { Title } = Typography;
 
@@ -19,6 +20,10 @@ const mapStateToProps = (state) => ({
     tours: state.firestore.ordered.tours,
     auth: state.firebase.auth
 });
+
+const mapDispatchToProps = {
+    publishAllToursInRange
+};
 
 class TourCalendar extends Component {
 
@@ -136,8 +141,7 @@ class TourCalendar extends Component {
 
     render(){
         const {tourAssignmentModalState, selectedTour, currentMonth, addATourState} = this.state;
-        const { profile, tours, auth } = this.props;
-
+        const { profile, tours, auth, publishAllToursInRange, match } = this.props;
         if(!profile.isLoaded && profile.isEmpty && !profile.roles){
             return (
                 <DefinedRow type="flex" direction="column" height="100%" width="100%" justify="center" align="middle">
@@ -211,10 +215,9 @@ class TourCalendar extends Component {
                                             <Row type="flex" justify="start">
                                                 {profile.roles && profile.roles.admin &&
                                                     <Fragment>
-                                                        <Button type="primary" icon="mail" style={styles.headerItem}>Email Guides</Button>
                                                         <Button type="primary" icon="calendar" style={styles.headerItem} onClick={() => {
-
-                                                        }}>Generate Calendar</Button>
+                                                            publishAllToursInRange(new Date(match.params.startTime), new Date(match.params.endTime));
+                                                        }}>Publish All Tours</Button>
                                                             <Button type="primary" icon="plus-circle" onClick={() => this.openModal("addATourState")} style={styles.headerItem}>Add Tour</Button>
                                                     </Fragment>
                                                 }
@@ -259,7 +262,7 @@ const styles = {
 
 export default compose(
     withRouter,
-    connect(mapStateToProps, null),
+    connect(mapStateToProps, mapDispatchToProps),
     firestoreConnect((props) => [{
         collection: 'tours',
         where: [

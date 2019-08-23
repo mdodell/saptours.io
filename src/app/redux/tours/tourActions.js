@@ -1,6 +1,6 @@
 import {openNotification} from "../../common/utils/openNotification";
 import {
-    DAYS,
+    DAYS, MONTHS,
 } from "../../common/constants";
 import moment from "moment";
 import isEqual from 'lodash/isEqual';
@@ -189,7 +189,7 @@ export const publishTour = (tour) => {
         try {
             await firestore.update({collection: 'tours', doc: tour.id}, {
                 published: true
-            });
+            })
         } catch(error){
             openNotification('error', 'bottomRight', 'Error', error.message, 3);
         }
@@ -251,6 +251,24 @@ export const dropSelfFromTour = (tour) => {
             openNotification('error', 'bottomRight', 'Error', error.message, 3);
         }
     };
+};
+
+export const publishAllToursInRange = (startDate, endDate) => {
+    return async (dispatch, getState, { getFirebase, getFirestore}) => {
+        const firestore = getFirestore();
+        try {
+            firestore.get({collection: 'tours', where: [['date', '>=', startDate], ['date', '<=', endDate]]}).then((tours) => {
+                tours.forEach(tour => {
+                    firestore.update({collection: 'tours', doc: tour.id}, {
+                        published: true
+                    });
+                });
+                openNotification('success', 'bottomRight', 'Success', `All tours for ${MONTHS[startDate.getUTCMonth()]} have been published!`, 3);
+            });
+        } catch(error) {
+            openNotification('error', 'bottomRight', 'Error', error.message, 3);
+        }
+    }
 };
 
 export const addSelfToTour = (tour) => {
