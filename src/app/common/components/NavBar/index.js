@@ -43,7 +43,7 @@ class NavBar extends Component {
                         <Title level={2} style={styles.appText}><Icon type="bank" style={styles.iconPadding}/>saptours.io</Title>
                     </Col>
                     {!isMobileOnly && <Col>
-                        {authenticated ? <SignedInMenu profile={profile} signOut={this.handleSignOut}/> : <SignedOutMenu handleLogin={this.handleLogin}/>}
+                        {authenticated ? <SignedInMenu profile={profile} auth={auth} signOut={this.handleSignOut}/> : <SignedOutMenu handleLogin={this.handleLogin}/>}
                     </Col>}
                 </Row>
             </Layout.Header>

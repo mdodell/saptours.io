@@ -5,13 +5,13 @@ import FeedbackIcon from "../FeedbackIcon"
 
 const { Title } = Typography;
 
-const SignedInMenu = ({profile, signOut}) => {
+const SignedInMenu = ({profile, signOut, auth}) => {
     return (
         <Row type="flex" align="middle" justify="center">
             <Col>
                 <Row type="flex" align="middle" justify="center">
                     <FeedbackIcon />
-                    <Avatar size="large" icon="user" />
+                    <Avatar size="large" icon="user" src={profile.photoURL} />
                 </Row>
 
             </Col>
