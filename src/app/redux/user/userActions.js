@@ -13,6 +13,28 @@ import {
     TOUR_SHIFTS, TRANSFER_STUDENT
 } from "../../common/constants";
 
+export const updateUserProfileImage = (file) => {
+    return async (dispatch, getState, { getFirebase, getFirestore}) => {
+        const firebase = getFirebase();
+        const firestore = getFirestore();
+        const currentUser = firebase.auth().currentUser;
+        const storageRef = firebase.storage().ref(currentUser.displayName + '/profilePicture/' + file.file.name);
+        try {
+            await storageRef.put(file.file.originFileObj).then(() => {
+                storageRef.getDownloadURL().then(url => {
+                    firebase.updateProfile({
+                        photoURL: url
+                    }).then(() => {
+                        openNotification('success', 'bottomRight', 'Success', 'You have updated your profile picture!', 3);
+                    })
+                });
+            })
+        } catch(error) {
+            openNotification('error', 'bottomRight', 'Error', error.message, 3);
+        }
+    }
+};
+
 export const updateUserProfileInfo = (userForm) => {
     return async (dispatch, getState, { getFirebase, getFirestore }) => {
         const firebase = getFirebase();

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {Col, Typography, Steps, Icon, Spin, Button, Row} from 'antd';
 import { connect } from 'react-redux';
 import {DefinedRow, VerticalLine, VerticalLineContainer} from "../../common/components/styled";
-import UserInfoForm from "./Forms/UserInfoForm";
+import UserInfoForm from "./forms/UserInfoForm";
 import {Formik} from "formik";
 import { compose } from 'redux';
 import {
@@ -22,17 +22,18 @@ import {
     availabilityValidationSchema,
     extracurricularValidationSchema,
     userValidationSchema
-} from "./Forms/schemas";
+} from "./forms/schemas";
 import {
     updateUserProfileInfo,
     updateUserProfileAcademics,
     updateUserProfileExtracurriculars,
     updateUserProfileAvailability,
 } from "../../redux/user/userActions";
-import AcademicInfoForm from "./Forms/AcademicInfoForm";
-import ExtracurricularInfoForm from "./Forms/ExtracurricularInfoForm";
-import AvailabilityInfoForm from "./Forms/AvailabilityInfoForm";
+import AcademicInfoForm from "./forms/AcademicInfoForm";
+import ExtracurricularInfoForm from "./forms/ExtracurricularInfoForm";
+import AvailabilityInfoForm from "./forms/AvailabilityInfoForm";
 import {firestoreConnect} from "react-redux-firebase";
+import UploadProfileImage from "./components/UploadProfileImage";
 const { Title } = Typography;
 const { Step } = Steps;
 
@@ -166,7 +167,9 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
     return (
         <DefinedRow height="calc(100vh - 64px)" width="100%" type="flex">
             <Col span={5}>
-                Photo here
+                <DefinedRow height="100%" width="100%" type="flex" justify="center" align="middle">
+                    <UploadProfileImage />
+                </DefinedRow>
             </Col>
             <VerticalLineContainer>
                 <VerticalLine />
