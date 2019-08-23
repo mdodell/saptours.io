@@ -14,9 +14,8 @@ import {
 } from "../../common/constants";
 
 export const updateUserProfileImage = (file) => {
-    return async (dispatch, getState, { getFirebase, getFirestore}) => {
+    return async (dispatch, getState, { getFirebase }) => {
         const firebase = getFirebase();
-        const firestore = getFirestore();
         const currentUser = firebase.auth().currentUser;
         const storageRef = firebase.storage().ref(currentUser.displayName + '/profilePicture/' + file.file.name);
         try {
