@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react';
 import { connect } from 'react-redux';
-import {Calendar, Badge, Switch, Row, Col, Typography, Button, Spin, Select, Dropdown, Menu} from 'antd';
+import {Calendar, Badge, Switch, Row, Col, Typography, Button, Spin, Select, Dropdown, Menu, Popconfirm} from 'antd';
 import './index.css';
 import TourAssignmentModal from "../../../common/components/modals/TourAssignmentModal";
 import {DefinedRow} from "../../../common/components/styled";
@@ -215,9 +215,16 @@ class TourCalendar extends Component {
                                             <Row type="flex" justify="start">
                                                 {profile.roles && profile.roles.admin &&
                                                     <Fragment>
+                                                        <Popconfirm
+                                                            placement="bottomLeft"
+                                                            title={`Are you sure you want to publish tours for the month of ${currentMonth}?`}
+                                                            onConfirm={() => publishAllToursInRange(new Date(match.params.startTime), new Date(match.params.endTime))}
+                                                            okText="Yes"
+                                                            cancelText="No"
+                                                        >
                                                         <Button type="primary" icon="calendar" style={styles.headerItem} onClick={() => {
-                                                            publishAllToursInRange(new Date(match.params.startTime), new Date(match.params.endTime));
                                                         }}>Publish All Tours</Button>
+                                                        </Popconfirm>
                                                             <Button type="primary" icon="plus-circle" onClick={() => this.openModal("addATourState")} style={styles.headerItem}>Add Tour</Button>
                                                     </Fragment>
                                                 }
