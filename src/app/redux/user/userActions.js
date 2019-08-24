@@ -13,6 +13,27 @@ import {
     TOUR_SHIFTS, TRANSFER_STUDENT
 } from "../../common/constants";
 
+export const updateUserProfileImage = (file) => {
+    return async (dispatch, getState, { getFirebase }) => {
+        const firebase = getFirebase();
+        const currentUser = firebase.auth().currentUser;
+        const storageRef = firebase.storage().ref(currentUser.displayName + '/profilePicture/' + file.file.name);
+        try {
+            await storageRef.put(file.file.originFileObj).then(() => {
+                storageRef.getDownloadURL().then(url => {
+                    firebase.updateProfile({
+                        photoURL: url
+                    }).then(() => {
+                        openNotification('success', 'bottomRight', 'Success', 'You have updated your profile picture!', 3);
+                    })
+                });
+            })
+        } catch(error) {
+            openNotification('error', 'bottomRight', 'Error', error.message, 3);
+        }
+    }
+};
+
 export const updateUserProfileInfo = (userForm) => {
     return async (dispatch, getState, { getFirebase, getFirestore }) => {
         const firebase = getFirebase();
@@ -29,6 +50,7 @@ export const updateUserProfileInfo = (userForm) => {
                     dietaryRestrictions: userForm.dietaryRestrictions,
                     birthday: firebase.firestore.Timestamp.fromDate(userForm.birthday.toDate()),
                     city: userForm.city,
+                    state: userForm.state,
                     tourAvailability: {
                         minTours: Number(userForm.minTours),
                         maxTours: Number(userForm.maxTours),
@@ -93,42 +115,56 @@ export const updateUserProfileExtracurriculars = (extracurricularForm) => {
     };
 };
 
-const deleteTourAvailability = (firestore, day, time, user) => {
+const deleteTourAvailability = (firestore, day, time, user, userId) => {
     firestore.get({
         collection: 'tourAvailability',
         where: [['day', '==',  day.charAt(0).toUpperCase() + day.slice(1)], ['hour', '==', time.value]]
     })
         .then(result => result.docs.forEach(document =>
             firestore.update({collection: 'tourAvailability', doc: document.id}, {
-                guides: firestore.FieldValue.arrayRemove(user)
+                guides: document.data().guides.filter(guide => guide.id !== userId),
+                guideIds: firestore.FieldValue.arrayRemove(userId)
             })
         ))
-        .catch(error => openNotification('error', 'bottomRight', 'Error', error.message, 3));
+        .catch(error => {
+            openNotification('error', 'bottomRight', 'Error', error.message, 3);
+        });
 };
 
-const createTourAvailability = (firestore, day, time, user) => {
+const createTourAvailability = (firestore, day, time, user, userId) => {
     firestore.get({
         collection: 'tourAvailability',
         where: [['day', '==',  day.charAt(0).toUpperCase() + day.slice(1)], ['hour', '==', time.value]]
     })
         .then(result => result.docs.forEach(document =>
             firestore.update({collection: 'tourAvailability', doc: document.id}, {
-                guides: firestore.FieldValue.arrayUnion(user)
+                guides: firestore.FieldValue.arrayUnion({
+                    user: {
+                        fullName: user.fullName,
+                        email: user.email,
+                        phoneNumber: user.phoneNumber,
+                        tourAvailability: user.tourAvailability
+                    },
+                    id: userId
+                }),
+                guideIds: firestore.FieldValue.arrayUnion(userId)
             })
         ))
-        .catch(error => openNotification('error', 'bottomRight', 'Error', error.message, 3));
+        .catch(error => {
+            openNotification('error', 'bottomRight', 'Error', error.message, 3);
+        });
 };
 
-const updateTourShiftAvailability = (availability, day, firestore, user) => {
+const updateTourShiftAvailability = (availability, day, firestore, user, userId) => {
     TOUR_SHIFTS.forEach(time => {
         if(availability[day]) {
             if (availability[day].some(tour => tour === time.value)) {
-                createTourAvailability(firestore, day, time, user);
+                createTourAvailability(firestore, day, time, user, userId);
             } else {
-                deleteTourAvailability(firestore, day, time, user);
+                deleteTourAvailability(firestore, day, time, user, userId);
             }
         } else {
-            deleteTourAvailability(firestore, day, time, user);
+            deleteTourAvailability(firestore, day, time, user, userId);
         }
     });
 };
@@ -139,13 +175,15 @@ export const updateUserProfileAvailability = (availability) => {
         const firestore = getFirestore();
         const user = firebase.auth().currentUser.uid;
         try {
-            updateTourShiftAvailability(availability, 'monday', firestore, user);
-            updateTourShiftAvailability(availability, 'tuesday', firestore, user);
-            updateTourShiftAvailability(availability, 'wednesday', firestore, user);
-            updateTourShiftAvailability(availability, 'thursday', firestore, user);
-            updateTourShiftAvailability(availability, 'friday', firestore, user);
-            openNotification('success', 'bottomRight', 'Success', 'Availability was updated!', 3)
-        } catch (error) {
+            firestore.get({collection: 'users', doc: user}).then(result => {
+                updateTourShiftAvailability(availability, 'monday', firestore, result.data(), user);
+                updateTourShiftAvailability(availability, 'tuesday', firestore, result.data(), user);
+                updateTourShiftAvailability(availability, 'wednesday', firestore, result.data(), user);
+                updateTourShiftAvailability(availability, 'thursday', firestore, result.data(), user);
+                updateTourShiftAvailability(availability, 'friday', firestore, result.data(), user);
+                openNotification('success', 'bottomRight', 'Success', 'Availability was updated!', 3)
+            });
+        } catch(error) {
             openNotification('error', 'bottomRight', 'Error', error.message, 3);
         }
     };

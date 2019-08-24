@@ -1,13 +1,16 @@
 // Route Constants
 export const HOME_ROUTE = "/";
 export const LOGIN_ROUTE = "/login";
+export const FORGOT_PASSWORD_ROUTE = "/forgot-password";
+export const UPDATE_PASSWORD_ROUTE = "/update-password";
 export const DASHBOARD_ROUTE = "/dashboard";
 export const DASHBOARD_CALENDAR_ROUTE = "/dashboard/calendar";
+export const DASHBOARD_CALENDAR_ROUTE_WITH_PARAMS = "/dashboard/calendar/:startTime/:endTime"
 export const ERROR_ROUTE = "/error";
 export const USER_TABLE_ROUTE = "/dashboard/user-table";
 export const PROFILE_ROUTE = "/dashboard/profile";
 export const PROFILE_EDIT_ROUTE = "/profile/edit";
-export const PROFILE_DISPLAY_ROUTE = "/profile/:id";
+export const PROFILE_DISPLAY_ROUTE = "/dashboard/profile/:id";
 
 // Role Constants
 export const TOUR_GUIDE = "Tour Guide";
@@ -15,7 +18,7 @@ export const HOST = "Host";
 export const CHATTER = "Chatter";
 
 // Regex
-export const phoneRegExp = /^((\\,[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+export const phoneRegExp = /\d{10}/;
 
 // Decision Types
 export const ED1 = 'ED1';
@@ -647,7 +650,8 @@ export const TOUR_TYPES = [
     "Group Visit",
     "VIP Tour",
     "Accessibility Tour",
-    "Fall for Brandeis Day"
+    "Fall for Brandeis Day",
+    "Counselor Tour"
 ];
 
 export const DAYS = [

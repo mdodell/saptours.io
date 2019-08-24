@@ -19,3 +19,7 @@
 .ant-input-number {
     width: 100%
 }
+
+.ant-upload.ant-upload-select-picture-card {
+    border-radius: 50%;
+}

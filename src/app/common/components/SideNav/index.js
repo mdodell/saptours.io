@@ -1,40 +1,42 @@
-import React, {Component} from 'react';
+import React, { useState } from 'react';
 import {Layout, Menu, Icon} from 'antd';
 import {Link, withRouter} from "react-router-dom";
-import {DASHBOARD_CALENDAR_ROUTE, PROFILE_ROUTE, USER_TABLE_ROUTE} from "../../constants";
+import {DASHBOARD_CALENDAR_ROUTE, DASHBOARD_ROUTE, PROFILE_ROUTE, USER_TABLE_ROUTE} from "../../constants";
 import { compose } from 'redux';
 import {firebaseConnect} from "react-redux-firebase";
+import moment from "moment";
 
 const {Sider} = Layout;
 
-class SideNav extends Component {
-    state = {
-        collapsed: false
-    };
+const getSelectedMenuItem = ({pathname}) => {
+    if(pathname.startsWith(DASHBOARD_CALENDAR_ROUTE)){
+        return DASHBOARD_ROUTE;
+    } else if(pathname.startsWith(USER_TABLE_ROUTE)) {
+        return USER_TABLE_ROUTE
+    } else if(pathname.startsWith(PROFILE_ROUTE)){
+        return PROFILE_ROUTE
+    }
+};
 
-    onCollapse = () => {
-        this.setState({collapsed: !this.state.collapsed});
-    };
-
-    render(){
-        const { location, firebase } = this.props;
-        const { collapsed } = this.state;
-        return (
-            <Sider theme="light" collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
-                <Menu theme="light" defaultSelectedKeys={['1']} selectedKeys={[location.pathname]} mode="inline">
-                    <Menu.Item key={DASHBOARD_CALENDAR_ROUTE}>
-                        <Link to={DASHBOARD_CALENDAR_ROUTE}>
-                            <Icon type="calendar"/>
-                            <span>Tour Calendar</span>
+const SideNav = ({firebase, location}) => {
+    const [collapsed, onCollapse] = useState(false);
+    return (
+            <Sider theme="light" collapsible collapsed={collapsed} onCollapse={() => onCollapse(!collapsed)}>
+                <Menu theme="light" defaultSelectedKeys={['1']} mode="inline" selectedKeys={[getSelectedMenuItem(location)]}
+                >
+                    <Menu.Item key={DASHBOARD_ROUTE}>
+                        <Link to={`${DASHBOARD_CALENDAR_ROUTE}/${moment().startOf('month').format('YYYY-MM-DD')}/${moment().endOf('month').format('YYYY-MM-DD')}`}>
+                                <Icon type="calendar" />
+                                <span>Tour Calendar</span>
                         </Link>
                     </Menu.Item>
                     <Menu.Item key={USER_TABLE_ROUTE}>
                         <Link to={USER_TABLE_ROUTE}>
-                            <Icon type="user"/>
-                            <span>Guide List</span>
+                                <Icon type="user"/>
+                                <span>Guide List</span>
                         </Link>
                     </Menu.Item>
-                    <Menu.Item key={`${PROFILE_ROUTE}/${firebase.auth().currentUser.uid}`}>
+                    <Menu.Item key={PROFILE_ROUTE}>
                         <Link to={`${PROFILE_ROUTE}/${firebase.auth().currentUser.uid}`}>
                             <Icon type="profile"/>
                             <span>Profile Page</span>
@@ -43,8 +45,7 @@ class SideNav extends Component {
                 </Menu>
             </Sider>
         );
-    }
-}
+    };
 
 export default compose(
     withRouter,

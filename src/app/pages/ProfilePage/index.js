@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {Col, Typography, Steps, Icon, Spin, Button, Row} from 'antd';
 import { connect } from 'react-redux';
 import {DefinedRow, VerticalLine, VerticalLineContainer} from "../../common/components/styled";
-import UserInfoForm from "./Forms/UserInfoForm";
+import UserInfoForm from "./forms/UserInfoForm";
 import {Formik} from "formik";
 import { compose } from 'redux';
 import {
@@ -22,17 +22,18 @@ import {
     availabilityValidationSchema,
     extracurricularValidationSchema,
     userValidationSchema
-} from "./Forms/schemas";
+} from "./forms/schemas";
 import {
     updateUserProfileInfo,
     updateUserProfileAcademics,
     updateUserProfileExtracurriculars,
     updateUserProfileAvailability,
 } from "../../redux/user/userActions";
-import AcademicInfoForm from "./Forms/AcademicInfoForm";
-import ExtracurricularInfoForm from "./Forms/ExtracurricularInfoForm";
-import AvailabilityInfoForm from "./Forms/AvailabilityInfoForm";
+import AcademicInfoForm from "./forms/AcademicInfoForm";
+import ExtracurricularInfoForm from "./forms/ExtracurricularInfoForm";
+import AvailabilityInfoForm from "./forms/AvailabilityInfoForm";
 import {firestoreConnect} from "react-redux-firebase";
+import UploadProfileImage from "./components/UploadProfileImage";
 const { Title } = Typography;
 const { Step } = Steps;
 
@@ -92,7 +93,6 @@ const populateDecisionType = (decisionTypes) => {
 };
 
 const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInfo, updateUserProfileAcademics, updateUserProfileExtracurriculars, updateUserProfileAvailability}) => {
-
     const [count, setStep] = useState(0);
     if(!profile.isLoaded && profile.isEmpty){
         return (
@@ -116,12 +116,13 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
         phoneNumber: profile.phoneNumber || '',
         dietaryRestrictions: profile.dietaryRestrictions || [],
         roles: profile.roles ? populateRoles(profile.roles) : [TOUR_GUIDE],
-        birthday: moment(profile.birthday.toDate()) || moment(Date.now()),
+        birthday: profile.birthday ? moment(profile.birthday.toDate()) : moment(Date.now()),
         city: profile.city || '',
+        state: profile.state || '',
         minTours: profile.tourAvailability ? profile.tourAvailability.minTours : '',
         maxTours: profile.tourAvailability ? profile.tourAvailability.maxTours : '',
-        activeStatus: 'Yes',
-        flexibility: 'Yes'
+        activeStatus: profile.tourAvailability ? profile.tourAvailability.activeStatus ? 'Yes' : 'No' : '',
+        flexibility: profile.tourAvailability ? profile.tourAvailability.flexibility ? 'Yes' : 'No' : '',
     };
 
     const academicInitialValues = {
@@ -166,7 +167,9 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
     return (
         <DefinedRow height="calc(100vh - 64px)" width="100%" type="flex">
             <Col span={5}>
-                Photo here
+                <DefinedRow height="100%" width="100%" type="flex" justify="center" align="middle">
+                    <UploadProfileImage />
+                </DefinedRow>
             </Col>
             <VerticalLineContainer>
                 <VerticalLine />
@@ -181,7 +184,7 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
                             <Step icon={<Icon type="user" onClick={() => setStep(0)}/>} title="User Info" />
                             <Step icon={<Icon type="book" onClick={() => setStep(1)}/>} title="Academic" />
                             <Step icon={<Icon type="smile" onClick={() => setStep(2)}/>} title="Extracurricular" />
-                            <Step icon={<Icon type="clock-circle" onClick={() => setStep(3)}/>} title="Availability" />
+                            {profile.tourAvailability.activeStatus && <Step icon={<Icon type="clock-circle" onClick={() => setStep(3)}/>} title="Availability" /> }
                         </Steps>
                     </Col>
                     <Col span={24}>
@@ -196,7 +199,7 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
                                 <Icon type="left" />
                                 Previous
                             </Button>}
-                            {count < 3 && <Button type="primary" onClick={() => setStep(count + 1)}>
+                            {count < (profile.tourAvailability.activeStatus ? 3 : 2) && <Button type="primary" onClick={() => setStep(count + 1)}>
                                 Next
                                 <Icon type="right" />
                             </Button> }
@@ -211,5 +214,5 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
 
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),
-    firestoreConnect((props) => [{collection: 'tourAvailability', where: ['guides', 'array-contains', props.match.params.id]}])
+    firestoreConnect((props) => [{collection: 'tourAvailability', where: ['guideIds', 'array-contains', props.match.params.id]}])
 )(ProfilePage);
