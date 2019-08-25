@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Table, Tag, Typography} from 'antd';
+import {Table, Tag, Typography, Descriptions, Divider} from 'antd';
 import {compose} from "redux";
 import {connect} from "react-redux";
 import {firestoreConnect} from "react-redux-firebase";
@@ -76,34 +76,82 @@ const addCommas=(values)=>{
 };
 
 const getDecision=(decisionType)=>{
+    const decisionArray=[];
+    console.log(decisionType);
+    if(decisionType.ED1){
+        decisionArray.push('ED 1');
+        decisionArray.push(', ');
+    }
+    if(decisionType.ED2){
+        decisionArray.push('ED 2');
+        decisionArray.push(', ');
+    }
+    if(decisionType.MKTYP){
+        decisionArray.push('Myra Kraft Transitional Year Program');
+        decisionArray.push(', ');
+    }
+    if(decisionType.POSSE){
+        decisionArray.push('POSSE');
+        decisionArray.push(', ');
+    }
+    if(decisionType.international){
+        decisionArray.push('International');
+        decisionArray.push(', ');
+    }
+    if(decisionType.legacy){
+        decisionArray.push('Legacy');
+        decisionArray.push(', ');
+    }
+    if(decisionType.midyear){
+        decisionArray.push('Midyear');
+        decisionArray.push(', ');
+    }
+    if(decisionType.regularDecision){
+        decisionArray.push('Regular Decision');
+        decisionArray.push(', ');
+    }
+    if(decisionType.transferStudent){
+        decisionArray.push('International');
+        decisionArray.push(', ');
+    }
 
+    decisionArray.pop();
+    return decisionArray;
 };
 
 const getExtra=(record)=>{
-    let extraInfo=[];
-    if(record.dietaryRestrictions){
-        extraInfo.push(`Dietary Restrictions: ${record.dietaryRestrictions}`)
-    }
-    if(record.research){
-        extraInfo.push(`Research: ${record.research}`)
-    }
-    if(record.graduationPlans){
-        extraInfo.push(`Post Graduation Plans: ${record.graduationPlans}`)
-    }
-    if(record.highSchool){
-        extraInfo.push(`High School: ${record.highSchool}`)
-    }
-    if(record.internships){
-        extraInfo.push(`Internships: ${record.internships}`)
-    }
-    if(record.jobs){
-        extraInfo.push(`Jobs: ${record.jobs}`)
-    }
-    if(record.decisionType){
-        extraInfo.push(`Decision Type: ${record.decisionType}`)
-    }
-    extraInfo=addCommas(extraInfo);
-    return extraInfo;
+    return(
+    <Descriptions title="Other Info">
+        <Descriptions.Item label="Dietary Restrictions">
+            {(record.dietaryRestrictions) ? record.dietaryRestrictions : ("N/A")}
+        </Descriptions.Item>
+        <Descriptions.Item label="Research">
+            {(record.research) ? record.research : ("N/A")}
+        </Descriptions.Item>
+        <Descriptions.Item label="Graduation Plans">
+            {(record.graduationPlans) ? record.graduationPlans : ("N/A")}
+        </Descriptions.Item>
+        <Descriptions.Item label="High School">
+            {(record.highSchool) ? record.highSchool : ("N/A")}
+        </Descriptions.Item>
+        <Descriptions.Item label="Hometown">
+            {(record.city) ? `${record.city}, ${record.state}` : ("N/A")}
+        </Descriptions.Item>
+        <Descriptions.Item label="Internships & Study Abroad">
+            {(record.internships) ? record.internships : ("N/A")}
+        </Descriptions.Item>
+        <Descriptions.Item label="Jobs">
+            {(record.jobs) ? record.jobs : ("N/A")}
+        </Descriptions.Item>
+        <Descriptions.Item label="Decision Type">
+            {(record.decisionType) ? getDecision(record.decisionType) : ("N/A")}
+        </Descriptions.Item>
+        <Descriptions.Item label="Dietary Restrictions">
+            {(record.dietaryRestrictions) ? record.dietaryRestrictions : ("N/A")}
+        </Descriptions.Item>
+
+    </Descriptions>
+    );
 };
 
 const columns = [
@@ -124,12 +172,12 @@ const columns = [
             roles&&<span>{getRoles(roles)}
             </span>),
         filters: [
-            { text: 'Ambassador', value: 'Ambassador' },
-            { text: 'Chatter', value: 'Chatter' },
-            { text: 'Host', value: 'Host'},
-            { text: 'Admin', value:'Admin'}
+            { text: 'Ambassador', value: 'tourGuide' },
+            { text: 'Chatter', value: 'chatter' },
+            { text: 'Host', value: 'host'},
+            { text: 'Admin', value:'admin'}
             ],
-        onFilter: (value, record) => record.roles.indexOf(value) === 0,
+        onFilter: (value, record) => record.roles[value],
     },
     {
         title: 'Grad Year',
@@ -141,12 +189,11 @@ const columns = [
         render: (graduationYear) => <span>{graduationYear || '0'}</span>
     },
     {
-        title: 'City',
-        dataIndex: 'city',
-        key: 'city',
+        title: 'State',
+        dataIndex: 'state',
+        key: 'state',
         width:130,
-        //add search
-        render: (city) => <span>{city || '-'}</span>
+        render: (state) => <span>{state || '-'}</span>
     },
     {
         title: 'Majors',
@@ -171,7 +218,7 @@ const columns = [
         title: 'Clubs',
         key: 'clubs',
         dataIndex: 'clubs',
-        width: 100,
+        width: 40,
         textWrap: 'word-break',
         render: clubs => (
              clubs&&<span>
@@ -186,6 +233,18 @@ const columns = [
         })}
             </span>)
    },
+    {
+        title: 'Action',
+        key: 'action',
+        width: 100,
+        render: () => (
+            <span>
+                 <a>Promote to Admin</a>
+                 <Divider type="vertical" />
+                 <a>Delete User</a>
+             </span>
+        ),
+    },
 ];
 
 const UserTable = ({users}) => {
