@@ -63,5 +63,13 @@ exports.userProfileUpdated = functions.firestore.document('/users/{userId}').onU
     }
 });
 
+exports.userProfileDeleted = functions.firestore.document('/users/{userId}').onDelete(doc => {
+    try {
+        return admin.auth().deleteUser(doc.id);
+    } catch(error) {
+        console.log('An error occured in userProfileDeleted! The error was ' + error);
+    }
+});
+
 
 // TODO: On user update, if the fullName, phoneNumber, or email changed, update the guide availability.

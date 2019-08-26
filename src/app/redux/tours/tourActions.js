@@ -20,7 +20,7 @@ export const createTour = (tourForm) => {
                         m: tourForm.time.minute(),
                         s: tourForm.time.second()
                     }));
-                    date.add(7 * i , 'days')
+                    date.add(7 * i , 'days');
                     firestore.add('tours', {
                         eventType: tourForm.eventType,
                         numberOfGuidesRequested: tourForm.numberOfGuides,
@@ -64,8 +64,23 @@ const updateGuidesInTour = (tourForm, firestore, firebase, tour, date) => {
                         description: tourForm.description,
                         assignedGuides: newGuides
                     })
+                }).then(() => {
+                    if(!tour.assignedGuideIds.includes(guideId)) {
+                        firestore.update({collection: 'users', doc: guideId}, {
+                            "tourStatistics.totalTours": firebase.firestore.FieldValue.increment(1),
+                        })
+                    }
                 });
             });
+
+            tour.assignedGuideIds.forEach(guideId => {
+                if(!tourForm.guides.includes(guideId)){
+                    firestore.update({collection: 'users', doc: guideId}, {
+                        "tourStatistics.totalTours": firebase.firestore.FieldValue.increment(-1),
+                    })
+                }
+            });
+
         } else {
             firestore.update({collection: 'tours', doc: tour.id}, {
                 date: firebase.firestore.Timestamp.fromDate(date.toDate()),
@@ -98,7 +113,21 @@ const updateGuidesInTour = (tourForm, firestore, firebase, tour, date) => {
                         description: tourForm.description,
                         assignedGuides: newGuides
                     })
+                }).then(() => {
+                    if(!tour.assignedGuideIds.includes(guideId)) {
+                        firestore.update({collection: 'users', doc: guideId}, {
+                            "tourStatistics.totalTours": firebase.firestore.FieldValue.increment(1),
+                        })
+                    }
                 });
+            });
+
+            tour.assignedGuideIds.forEach(guideId => {
+                if(!tourForm.guides.includes(guideId)){
+                    firestore.update({collection: 'users', doc: guideId}, {
+                        "tourStatistics.totalTours": firebase.firestore.FieldValue.increment(-1),
+                    })
+                }
             });
         } else {
             firestore.update({collection: 'tours', doc: tour.id}, {
@@ -245,7 +274,6 @@ export const dropSelfFromTour = (tour) => {
 
             firestore.update({collection: 'users', doc: userId}, {
                 "tourStatistics.droppedTours": firebase.firestore.FieldValue.increment(1),
-                "tourStatistics.totalTours": firebase.firestore.FieldValue.increment(-1)
             });
         } catch(error){
             openNotification('error', 'bottomRight', 'Error', error.message, 3);
@@ -301,4 +329,18 @@ export const addSelfToTour = (tour) => {
             openNotification('error', 'bottomRight', 'Error', error.message, 3);
         }
     };
+};
+
+export const incrementUserNoShows = (userId) => {
+    return async (dispatch, getState, {getFirebase, getFirestore}) => {
+        const firestore = getFirestore();
+        const firebase = getFirebase();
+        try {
+            firestore.update({collection: 'users', doc: userId}, {
+                "tourStatistics.noShows": firebase.firestore.FieldValue.increment(1)
+            })
+        } catch(error) {
+            openNotification('error', 'bottomRight', 'Error', error.message, 3);
+        }
+    }
 };

@@ -87,3 +87,59 @@ export const updatePassword = (updatePasswordForm) => {
         }
     };
 };
+
+export const promoteToAdmin = (userToPromote, profile) => {
+    return async (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firestore = getFirestore();
+        try {
+            if (profile.roles.admin) {
+                firestore.update({collection: 'users', doc: userToPromote.id}, {
+                    "roles.admin": true
+                }).then(() => {
+                    openNotification('success', 'bottomRight', 'Success', `${userToPromote.fullName} was promoted to admin!`, 3);
+                })
+            }
+        } catch(error) {
+            openNotification('error', 'bottomRight', 'Error', error.message, 3);
+
+        }
+    }
+}
+
+export const deleteUser = (userToDelete, profile) => {
+    return async (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firebase = getFirebase();
+        const firestore = getFirestore();
+        const user = firebase.auth().currentUser;
+        const userId = user.uid;
+        try {
+                if(profile.roles.admin || userToDelete.id === userId) {
+                    firestore.get({collection: 'tours', where: ['assignedGuideIds', 'array-contains', userToDelete.id]}).then(result => result.docs.forEach(document =>
+                        firestore.update({collection: 'tours', doc: document.id}, {
+                            assignedGuides: document.data().assignedGuides.filter(guide => guide.id !== userId),
+                            assignedGuideIds: firestore.FieldValue.arrayRemove(userId)
+                        })
+                    )).then(() => {
+                        firestore.get({collection: 'tourAvailability', where: ['guideIds', 'array-contains', userToDelete.id]}).then(result => result.docs.forEach(document =>
+                            firestore.update({collection: 'tourAvailability', doc: document.id}, {
+                                guides: document.data().guides.filter(guide => guide.id !== userId),
+                                guideIds: firestore.FieldValue.arrayRemove(userId)
+                            })
+                        )).then(() => {
+                            firestore.delete({collection: 'users', doc: userToDelete.id}).then(() => {
+                                if(userToDelete.id === userId) {
+                                    firebase.auth().signOut();
+                                } else {
+                                    openNotification('success', 'bottomRight', 'Success', `${userToDelete.fullName} was deleted!`, 3);
+                                }
+                            })
+                        });
+                    });
+                }
+
+        //        TODO: Remove guide from tour availability and any future tours
+        } catch(error) {
+            openNotification('error', 'bottomRight', 'Error', error.message, 3);
+        }
+    }
+};
