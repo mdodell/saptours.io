@@ -1,7 +1,7 @@
 import { openNotification } from "../../common/utils/openNotification";
 import { TOUR_GUIDE, HOST, CHATTER } from "../../common/constants";
 
-export const registerUser = (user) => { //curly braces are implied
+export const registerUser = (user) => {
     return async (dispatch, getState, {getFirebase, getFirestore}) => {
         const firebase = getFirebase();
         const firestore = getFirestore();
