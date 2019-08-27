@@ -10,7 +10,7 @@ export const registerUser = (user) => { //curly braces are implied
                 .auth()
                 .createUserWithEmailAndPassword(user.email, user.passwordOne);
             await createdUser.user.updateProfile({
-                displayName: user.firstName + user.lastName
+                displayName: user.firstName + ' ' + user.lastName
             });
             let newUser = {
                 fullName: `${user.firstName} ${user.lastName}`,
