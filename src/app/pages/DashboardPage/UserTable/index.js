@@ -1,5 +1,5 @@
 import React, {Fragment} from 'react';
-import {Table, Tag, Typography, Descriptions, Divider, Popconfirm, message, Icon, Progress, Row, Spin} from 'antd';
+import {Table, Tag, Typography, Descriptions, Divider, Popconfirm, message, Icon, Progress, Row, Spin, Avatar} from 'antd';
 import {compose} from "redux";
 import {connect} from "react-redux";
 import {firestoreConnect} from "react-redux-firebase";
@@ -8,6 +8,7 @@ import {DefinedRow} from "../../../common/components/styled";
 import {deleteUser, promoteToAdmin} from "../../../redux/auth/authActions";
 import {withRouter} from "react-router-dom";
 import {incrementUserNoShows} from "../../../redux/tours/tourActions";
+import SearchIcon from "./SearchIcon";
 
 const mapStateToProps = (state) => ({
     users: state.firestore.ordered.users,
@@ -160,8 +161,23 @@ const getExtra=(record)=>{
             <Descriptions.Item label="Dietary Restrictions">
                 {(record.dietaryRestrictions) ? record.dietaryRestrictions : ("N/A")}
             </Descriptions.Item>
-            <Descriptions.Item label={`Tour Guide Statistics (${record.tourStatistics.totalTours} ${record.tourStatistics.totalTours === 1 ? 'Tour' : 'Tours'})`} span={3}></Descriptions.Item>
+            <Descriptions.Item label="Clubs" >
+                    if(typeof record.clubs !== undefined){
+                        record.clubs.map(club => {
+                            let color = clubColor(club);
+                            return (
+                                <div>
+                                    <Tag color={color} key={club}>
+                                        {club}
+                                    </Tag>
+                                </div>
+                            );
+                        })
+                    }
+            </Descriptions.Item>
+            <Descriptions.Item label="Tour Guide Statistics" span={3}>{`(${record.tourStatistics.totalTours} ${record.tourStatistics.totalTours === 1 ? 'Tour' : 'Tours'})`}</Descriptions.Item>
         </Descriptions>
+
     );
 };
 
@@ -240,27 +256,6 @@ const UserTable = ({users, profile, auth, deleteUser, history, promoteToAdmin, i
             key: 'phoneNumber',
             render: phoneNumber => <span>{phoneNumber || '-'}</span>
         },
-        // TODO: Add this to the expander!
-        //  {
-        //      title: 'Clubs',
-        //      key: 'clubs',
-        //      dataIndex: 'clubs',
-        //      // width: 100,
-        //      textWrap: 'word-break',
-        //      render: clubs => (
-        //           clubs&&<div >
-        //      {clubs.map(club => {
-        //          let color=clubColor(club);
-        //          return (
-        //              <div>
-        //              <Tag color={color} key={club}>
-        //                  {club}
-        //              </Tag>
-        //              </div>
-        //          );
-        //      })}
-        //          </div>)
-        // },
         {
             title: 'Action',
             key: 'actions',
@@ -331,6 +326,7 @@ const UserTable = ({users, profile, auth, deleteUser, history, promoteToAdmin, i
     return (
         <div>
             <Title style={styles.headingStyle} level={2}>Guide List</Title>
+            <SearchIcon />
             <Table
                 columns={columns}
                 dataSource={users}
