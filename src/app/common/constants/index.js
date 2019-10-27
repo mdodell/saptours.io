@@ -366,10 +366,9 @@ export const CLUBS_LIST = [
     'Young Americans for Liberty'
 ];
 
-export const CLUBTYPES=[
-    [
-        'Academic',
-       'Association of Latino Professionals For America',
+export const CLUB_TYPES = {
+    ACADEMIC: [
+        'Association of Latino Professionals For America',
         'Astronomy Club',
         'Brandeis American Sign Language Club',
         'Brandeis Initiative for Technology, Machines, Apps and Programming',
@@ -392,8 +391,7 @@ export const CLUBTYPES=[
         'TAMID Group at Brandeis',
         'Virtual Reality and Game Development Club'
     ],
-    [
-        'Arts and Culture',
+    ARTS_AND_CULTURE: [
         'Brandeis African Dance and Drumming Club',
         'Brandeis African Students Organization',
         'Brandeis Anime and Cosplay Association',
@@ -433,18 +431,16 @@ export const CLUBTYPES=[
         'Triskelion',
         'Vietnamese Students Association'
     ],
-    [
-        'Competition',
+    COMPETITION: [
         'Brandeis Academic Debate and Speech Society',
         'Brandeis Chess Club',
         'Brandeis Climbing Team',
         'Brandeis Football Club',
         'Brandeis Quiz Bowl Team',
         'Brandeis Ski and Snowboard Team',
-        'Brandeis esports Organization (SSBM)'
+        'Brandeis Esports Organization (SSBM)'
     ],
-    [
-        'Media and Publications',
+    MEDIA_AND_PUBLICATIONS: [
         'Archon Yearbook',
         'Basement Records',
         'Blacklist Journal',
@@ -459,21 +455,7 @@ export const CLUBTYPES=[
         'The Justice',
         'WBRS 100.1 FM'
     ],
-    [
-        'Miscellaneous',
-        'Brandeis Aviation Club',
-        'Brandeis Cupcake Obsession',
-        'Brandeis Pokemon Club',
-        'Brandeis Prosthesis Club',
-        'Campus Activities Board',
-        'Console Gamers X',
-        'Game Knight',
-        'Greek Awareness Council',
-        'Trading Card Game club',
-        'Women of Color Alliance'
-    ],
-    [
-        'Performance',
+    PERFORMANCE: [
         'Adagio Dance Company',
         'Bad Grammer',
         'Ballet Club',
@@ -506,8 +488,7 @@ export const CLUBTYPES=[
         'Voices of Soul',
         'Work in Progress'
     ],
-    [
-        'Political and Activism',
+    POLITICAL_AND_ACTIVISM: [
         'Active Minds at Brandeis University',
         'Brandeis Climate Justice',
         'Brandeis Community Farm (Brandeis Farmers Club)',
@@ -527,8 +508,7 @@ export const CLUBTYPES=[
         'Undergraduate Student Union',
         'Young Americans for Liberty'
     ],
-    [
-        'Service',
+    SERVICE: [
         'Brandeis 6TALK',
         'Brandeis Emergency Medical Corps',
         'Brandeis Encourages Women in Science and Engineering',
@@ -547,8 +527,7 @@ export const CLUBTYPES=[
         'Students Talking About Relationships',
         'Waltham Group'
     ],
-    [
-        'Spiritual and Religious',
+    SPIRITUAL_AND_RELIGIOUS: [
         'Asian Baptist Student Koinonia',
         'Brandeis Hillel',
         'Brandeis Interfaith Group',
@@ -566,8 +545,7 @@ export const CLUBTYPES=[
         'Namaskar',
         'Sangha: Buddhist Meditation Club'
     ],
-    [
-        'Sports and Fitness',
+    SPORTS_AND_FITNESS: [
         'Badminton Club',
         'Banshee: Brandeis Women\'s Ultimate Frisbee',
         'Basketball Club',
@@ -597,8 +575,20 @@ export const CLUBTYPES=[
         'Ice Skating Club',
         'Mountain Club',
         'Women\'s Rugby'
+    ],
+    MISCELLANEOUS: [
+        'Brandeis Aviation Club',
+        'Brandeis Cupcake Obsession',
+        'Brandeis Pokemon Club',
+        'Brandeis Prosthesis Club',
+        'Campus Activities Board',
+        'Console Gamers X',
+        'Game Knight',
+        'Greek Awareness Council',
+        'Trading Card Game Club',
+        'Women of Color Alliance'
     ]
-];
+};
 
 export const FELLOWSHIPS_AND_SCHOLARSHIPS = [
     'Barry M. Goldwater Scholarship',
@@ -710,7 +700,7 @@ export const STATES = [
     "Mississippi",
     "Montana",
     "North Carolina",
-    " North Dakota",
+    "North Dakota",
     "Nebraska",
     "New Hampshire",
     "New Jersey",
@@ -736,3 +726,7 @@ export const STATES = [
     "West Virginia",
     "Wyoming"
 ];
+
+// Miscellaneous
+export const AND_QUERY = "AND Query";
+export const OR_QUERY = "OR Query"

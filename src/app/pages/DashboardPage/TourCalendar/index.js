@@ -276,7 +276,7 @@ export default compose(
         collection: 'tours',
         where: [
             ['date', '>=', new Date(props.match.params.startTime)],
-            ['date', '<=', new Date(props.match.params.endTime)]
+            ['date', '<=', new Date((new Date(props.match.params.endTime)).getTime() + 60 * 60 * 24 * 1000)] // Add a day since end time needs at least one day in order to work
         ]
     }])
 )(TourCalendar);

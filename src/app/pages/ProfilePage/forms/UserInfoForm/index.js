@@ -54,6 +54,7 @@ const UserInfoForm = () => {
                         component={AntSelect}
                         name="state"
                         label="Home State"
+                        placeholder="Massachusetts, Arizona, New York..."
                         selectOptions={STATES}
                     />
                 </Col>
