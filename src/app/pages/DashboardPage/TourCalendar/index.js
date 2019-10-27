@@ -91,7 +91,7 @@ class TourCalendar extends Component {
                 <ul className="events">
                     {listData.map(item => (
                         // This boolean logic will let admins see events in the future that have not been assigned yet. Normal guides cannot see these future events until at least one guide has been assigned to them
-                        ((!(
+                         ((!(
                             this.props.profile.roles &&
                             !this.props.profile.roles.admin
                             && (MONTHS[new Date(item.date.seconds * 1000).getMonth()] !== MONTHS[new Date(Date.now()).getMonth()])
@@ -149,71 +149,71 @@ class TourCalendar extends Component {
                     <Title>Loading</Title>
                 </DefinedRow>
             )
-        }
-        return (
-            <Fragment>
-                <AddTourModal visible={addATourState} onOk={() => this.closeModal("addATourState")} onCancel={() => this.closeModal("addATourState")}/>
-                {selectedTour && <TourAssignmentModal title={this.formatEventTitle(selectedTour)} tour={selectedTour} visible={tourAssignmentModalState} onOk={() => this.closeModal("tourAssignmentModalState")} onCancel={() => this.closeModal("tourAssignmentModalState")}/>}
-                <Calendar
-                    onPanelChange={this.setCurrentMonth}
-                    dateCellRender={this.dateCellRender}
-                    value={(moment(this.props.match.params.startTime))}
-                    headerRender={({ value, type, onChange, onTypeChange }) => {
-                        const start = 0;
-                        const end = 12;
-                        const monthOptions = [];
+        } else {
+            return (
+                <Fragment>
+                    <AddTourModal visible={addATourState} onOk={() => this.closeModal("addATourState")} onCancel={() => this.closeModal("addATourState")}/>
+                    {selectedTour && <TourAssignmentModal title={this.formatEventTitle(selectedTour)} tour={selectedTour} visible={tourAssignmentModalState} onOk={() => this.closeModal("tourAssignmentModalState")} onCancel={() => this.closeModal("tourAssignmentModalState")}/>}
+                    <Calendar
+                        onPanelChange={this.setCurrentMonth}
+                        dateCellRender={this.dateCellRender}
+                        value={(moment(this.props.match.params.startTime))}
+                        headerRender={({ value, type, onChange, onTypeChange }) => {
+                            const start = 0;
+                            const end = 12;
+                            const monthOptions = [];
 
-                        const current = value.clone();
-                        const localeData = value.localeData();
-                        const months = [];
-                        for (let i = 0; i < 12; i++) {
-                            current.month(i);
-                            months.push(localeData.monthsShort(current));
-                        }
+                            const current = value.clone();
+                            const localeData = value.localeData();
+                            const months = [];
+                            for (let i = 0; i < 12; i++) {
+                                current.month(i);
+                                months.push(localeData.monthsShort(current));
+                            }
 
-                        for (let index = start; index < end; index++) {
-                            monthOptions.push(
-                                <Select.Option key={`${index}`}>
-                                    {months[index]}
-                                </Select.Option>,
-                            );
-                        }
-                        const month = value.month();
-                        return (
-                            <Row type="flex" align="middle" justify="end">
-                                <Col span={24} style={styles.headerRow}>
-                                    <Row type="flex" justify="center">
-                                        <Title level={2}>{currentMonth} Tour Calendar</Title>
-                                    </Row>
-                                </Col>
-                                <Col span={16}>
-                                    <Row type="flex" justify="start">
-                                        <Badge color="blue" text="Admissions Tour" style={styles.headerItem}/>
-                                        <Badge color="red" text="Coverage Needed" style={styles.headerItem}/>
-                                        <Badge color="gold" text="Group Visit" style={styles.headerItem}/>
-                                        <Badge color="geekblue" text="Fall for Brandeis Day" style={styles.headerItem}/>
-                                    </Row>
-                                </Col>
-                                <Col span={8}>
-                                    <Row type="flex" align="middle" justify="end">
-                                        <Select
-                                            dropdownMatchSelectWidth={false}
-                                            value={String(month)}
-                                            onChange={selectedMonth => {
-                                                const newValue = value.clone();
-                                                newValue.month(parseInt(selectedMonth, 10));
-                                                onChange(newValue);
-                                            }}
-                                        >
-                                            {monthOptions}
-                                        </Select>
-                                    </Row>
-                                </Col>
-                                <Col span={24}>
-                                    <Row type="flex" align="middle">
-                                        <Col span={18} style={styles.headerRow}>
-                                            <Row type="flex" justify="start">
-                                                {profile.roles && profile.roles.admin &&
+                            for (let index = start; index < end; index++) {
+                                monthOptions.push(
+                                    <Select.Option key={`${index}`}>
+                                        {months[index]}
+                                    </Select.Option>,
+                                );
+                            }
+                            const month = value.month();
+                            return (
+                                <Row type="flex" align="middle" justify="end">
+                                    <Col span={24} style={styles.headerRow}>
+                                        <Row type="flex" justify="center">
+                                            <Title level={2}>{currentMonth} Tour Calendar</Title>
+                                        </Row>
+                                    </Col>
+                                    <Col span={16}>
+                                        <Row type="flex" justify="start">
+                                            <Badge color="blue" text="Admissions Tour" style={styles.headerItem}/>
+                                            <Badge color="red" text="Coverage Needed" style={styles.headerItem}/>
+                                            <Badge color="gold" text="Group Visit" style={styles.headerItem}/>
+                                            <Badge color="geekblue" text="Fall for Brandeis Day" style={styles.headerItem}/>
+                                        </Row>
+                                    </Col>
+                                    <Col span={8}>
+                                        <Row type="flex" align="middle" justify="end">
+                                            <Select
+                                                dropdownMatchSelectWidth={false}
+                                                value={String(month)}
+                                                onChange={selectedMonth => {
+                                                    const newValue = value.clone();
+                                                    newValue.month(parseInt(selectedMonth, 10));
+                                                    onChange(newValue);
+                                                }}
+                                            >
+                                                {monthOptions}
+                                            </Select>
+                                        </Row>
+                                    </Col>
+                                    <Col span={24}>
+                                        <Row type="flex" align="middle">
+                                            <Col span={18} style={styles.headerRow}>
+                                                <Row type="flex" justify="start">
+                                                    {profile.roles && profile.roles.admin &&
                                                     <Fragment>
                                                         <Popconfirm
                                                             placement="bottomLeft"
@@ -222,39 +222,41 @@ class TourCalendar extends Component {
                                                             okText="Yes"
                                                             cancelText="No"
                                                         >
-                                                        <Button type="primary" icon="calendar" style={styles.headerItem} onClick={() => {
-                                                        }}>Publish All Tours</Button>
+                                                            <Button type="primary" icon="calendar" style={styles.headerItem} onClick={() => {
+                                                            }}>Publish All Tours</Button>
                                                         </Popconfirm>
-                                                            <Button type="primary" icon="plus-circle" onClick={() => this.openModal("addATourState")} style={styles.headerItem}>Add Tour</Button>
+                                                        <Button type="primary" icon="plus-circle" onClick={() => this.openModal("addATourState")} style={styles.headerItem}>Add Tour</Button>
                                                     </Fragment>
-                                                }
-                                                {profile.roles && profile.roles.tourGuide &&
+                                                    }
+                                                    {profile.roles && profile.roles.tourGuide &&
                                                     <Fragment>
                                                         <Dropdown overlay={
                                                             <Menu>
                                                                 <Menu.Item key="1" onClick={() => downloadToursToICal(tours, auth)}>Download to iCalendar</Menu.Item>
                                                                 <Menu.Item key="2" onClick={() => downloadToursToGoogleCalendar(tours, auth)}>Download to Google Calendar</Menu.Item>
-                                                        </Menu>
+                                                            </Menu>
                                                         }>
                                                             <Button type="primary" icon="calendar" style={styles.headerItem}>Download to Calendar</Button>
                                                         </Dropdown>
                                                     </Fragment>
-                                                }
-                                            </Row>
-                                        </Col>
-                                        <Col span={6} style={styles.headerRow}>
-                                            <Row type="flex" align="middle" justify="end">
-                                                {profile.roles && profile.roles.tourGuide && <div style={styles.headerItem}>My tours: <Switch onChange={this.personalFilter}></Switch></div>}
-                                                Coverage needed: <Switch onChange={this.coverageFilter}></Switch>
-                                            </Row>
-                                        </Col>
+                                                    }
+                                                </Row>
+                                            </Col>
+                                            <Col span={6} style={styles.headerRow}>
+                                                <Row type="flex" align="middle" justify="end">
+                                                    {profile.roles && profile.roles.tourGuide && <div style={styles.headerItem}>My tours: <Switch onChange={this.personalFilter}></Switch></div>}
+                                                    Coverage needed: <Switch onChange={this.coverageFilter}></Switch>
+                                                </Row>
+                                            </Col>
 
-                                    </Row>
-                                </Col>
-                            </Row>)
-                    }}/>
-            </Fragment>
-        );
+                                        </Row>
+                                    </Col>
+                                </Row>)
+                        }}/>
+                </Fragment>
+            );
+        }
+
     }
 };
 
@@ -274,7 +276,7 @@ export default compose(
         collection: 'tours',
         where: [
             ['date', '>=', new Date(props.match.params.startTime)],
-            ['date', '<=', new Date(props.match.params.endTime)]
+            ['date', '<=', new Date((new Date(props.match.params.endTime)).getTime() + 60 * 60 * 24 * 1000)] // Add a day since end time needs at least one day in order to work
         ]
     }])
 )(TourCalendar);

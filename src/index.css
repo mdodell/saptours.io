@@ -23,3 +23,11 @@
 .ant-upload.ant-upload-select-picture-card {
     border-radius: 50%;
 }
+
+.ant-upload-picture-card-wrapper {
+    width: auto;
+}
+
+.ant-upload-picture-card-wrapper:hover {
+    cursor: pointer;
+}

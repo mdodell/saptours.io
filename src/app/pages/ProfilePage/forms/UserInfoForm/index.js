@@ -2,7 +2,7 @@ import React from 'react';
 import {Field, Form} from "formik";
 import {Row, Col, Icon, Typography, Button} from 'antd';
 import {AntDatePicker, AntInput, AntInputNumber, AntSelect} from "../../../../common/components/form/AntFormik";
-import {CHATTER, DIETARY_RESTRICTIONS, HOST, TOUR_GUIDE} from "../../../../common/constants";
+import {CHATTER, DIETARY_RESTRICTIONS, HOST, STATES, TOUR_GUIDE} from "../../../../common/constants";
 const { Title } = Typography;
 
 const UserInfoForm = () => {
@@ -51,11 +51,11 @@ const UserInfoForm = () => {
                 </Col>
                 <Col span={7}>
                     <Field
-                        component={AntInput}
+                        component={AntSelect}
                         name="state"
-                        type="state"
-                        placeholder="Arizona, New York, California..."
                         label="Home State"
+                        placeholder="Massachusetts, Arizona, New York..."
+                        selectOptions={STATES}
                     />
                 </Col>
                 <Col span={7}>

@@ -118,7 +118,7 @@ const ProfilePage = ({firestore, profile, tourAvailability, updateUserProfileInf
         roles: profile.roles ? populateRoles(profile.roles) : [TOUR_GUIDE],
         birthday: profile.birthday ? moment(profile.birthday.toDate()) : moment(Date.now()),
         city: profile.city || '',
-        state: profile.state || '',
+        state: profile.state || 'Massachusetts',
         minTours: profile.tourAvailability ? profile.tourAvailability.minTours : '',
         maxTours: profile.tourAvailability ? profile.tourAvailability.maxTours : '',
         activeStatus: profile.tourAvailability ? profile.tourAvailability.activeStatus ? 'Yes' : 'No' : '',

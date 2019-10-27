@@ -87,7 +87,7 @@ export const updateUserProfileAcademics = (academicForm) => {
                     MKTYP: academicForm.decisionType.includes(MKTYP),
                     international: academicForm.decisionType.includes(INTERNATIONAL_STUDENT),
                     legacy: academicForm.decisionType.includes(LEGACY_STUDENT),
-                    transferStudent: academicForm.decisionType.includes(TRANSFER_STUDENT)
+                    transfer: academicForm.decisionType.includes(TRANSFER_STUDENT)
                 },
                 graduationPlans: academicForm.postGraduationPlans
             }).then(() =>  openNotification('success', 'bottomRight', 'Success!', "You have updated your profile!", 3))
