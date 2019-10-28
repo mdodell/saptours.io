@@ -144,9 +144,9 @@ const getDecision=(decisionType)=>{
 
 const displayClubs = clubs => clubs.map(club => <Tag key={club} color={getClubColor(club)}>{club}</Tag>);
 
-const displayExtraFields = (record, profile, auth, history, promoteToAdmin, incrementUserNoShows) =>{
+const displayExtraFields = (record, profile, auth, history, promoteToAdmin, incrementUserNoShows, deleteUser) =>{
     return(
-        <Descriptions title={expandedRowHeader(record, profile, auth, history, promoteToAdmin, incrementUserNoShows)} layout="horizontal" column={3} bordered>
+        <Descriptions title={expandedRowHeader(record, profile, auth, history, promoteToAdmin, incrementUserNoShows, deleteUser)} layout="horizontal" column={3} bordered>
             <Descriptions.Item label="Dietary Restrictions">
                 {record.dietaryRestrictions ?  record.dietaryRestrictions.length === 0 ? 'N/A' : record.dietaryRestrictions.join(', ') : 'N/A'}
             </Descriptions.Item>
@@ -182,7 +182,7 @@ const displayExtraFields = (record, profile, auth, history, promoteToAdmin, incr
     );
 };
 
-const expandedRowHeader = (record, profile, auth, history, promoteToAdmin, incrementUserNoShows) => {
+const expandedRowHeader = (record, profile, auth, history, promoteToAdmin, incrementUserNoShows, deleteUser) => {
     return (
         <DefinedRow type="flex" align="middle" width="100%" height="100%">
             <Title level={4} style={styles.noMargin}>Other Info</Title>
@@ -389,7 +389,7 @@ const UserTable = ({users, profile, auth, deleteUser, history, promoteToAdmin, i
                     let {tourStatistics} = record;
                     return (
                         <div style={{ margin: 0 }}>
-                            {displayExtraFields(record, profile, auth, history, promoteToAdmin, incrementUserNoShows)}
+                            {displayExtraFields(record, profile, auth, history, promoteToAdmin, incrementUserNoShows, deleteUser)}
                             {profile.roles.admin &&
                                 <div style={styles.marginTop}>
                                     <Text style={styles.subHeadingStyle} strong level={4}>Tour Guide Statistics: {`(${record.tourStatistics.totalTours} ${record.tourStatistics.totalTours === 1 ? 'Tour' : 'Tours'})`}</Text>

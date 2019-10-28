@@ -86,13 +86,12 @@ class TourCalendar extends Component {
         } else {
             listData = this.getListData(value)
         }
-        if(listData.length > 0) {
+        if(listData.length > 0 && this.props.profile.roles) {
             return (
                 <ul className="events">
                     {listData.map(item => (
                         // This boolean logic will let admins see events in the future that have not been assigned yet. Normal guides cannot see these future events until at least one guide has been assigned to them
                          ((!(
-                            this.props.profile.roles &&
                             !this.props.profile.roles.admin
                             && (MONTHS[new Date(item.date.seconds * 1000).getMonth()] !== MONTHS[new Date(Date.now()).getMonth()])
                             && !item.published
