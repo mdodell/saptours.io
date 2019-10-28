@@ -71,7 +71,7 @@ const UserInfoForm = () => {
                     <Field
                         name="dietaryRestrictions"
                         label="Dietary Restrictions (not preferences):"
-                        mode="multiple"
+                        mode="tags"
                         component={AntSelect}
                         selectOptions={DIETARY_RESTRICTIONS}
                     />
