@@ -599,6 +599,7 @@ export const FELLOWSHIPS_AND_SCHOLARSHIPS = [
     'Churchill Scholarship',
     'Critical Language Scholarship',
     'DAAD Research Internships in Science and Engineering (RISE)',
+    'Dean\'s Scholarship',
     'Dr. Martin Luther King Jr. Fellowship',
     'Fulbright U.S. Student Program',
     'George J. Mitchell Scholarship',
@@ -607,8 +608,10 @@ export const FELLOWSHIPS_AND_SCHOLARSHIPS = [
     'Humanities Fellowship',
     'Humanity in Action Fellowship',
     'James C. Gaither Junior Fellows Program',
+    'Justice Brandeis Scholarship',
     'Mortimer Hays-Brandeis Traveling Fellowship',
     'Pickering Fellowship',
+    'Presidential Scholarship',
     'Provost\'s Undergraduate Research Fund',
     'QBReC Fellowship',
     'Rangel Summer Enrichment Program',
@@ -625,6 +628,7 @@ export const FELLOWSHIPS_AND_SCHOLARSHIPS = [
     'The Leonard Bernstein Fellowship',
     'The Marshall Scholarship',
     'The Wien International Scholarship Program',
+    'Trustee Scholarship',
     'Udall Scholarship'
 ];
 
