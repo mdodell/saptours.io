@@ -138,8 +138,6 @@ export const deleteUser = (userToDelete, profile) => {
                         });
                     });
                 }
-
-        //        TODO: Remove guide from tour availability and any future tours
         } catch(error) {
             openNotification('error', 'bottomRight', 'Error', error.message, 3);
         }

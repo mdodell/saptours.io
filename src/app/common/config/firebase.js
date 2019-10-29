@@ -27,4 +27,6 @@ firebase.auth().onAuthStateChanged((user) => {
     }
 });
 
+// TODO: Display lastLogin and loginCount in expandedRow UI
+
 export default firebase;
