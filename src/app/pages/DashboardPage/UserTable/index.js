@@ -383,6 +383,7 @@ const UserTable = ({users, profile, auth, deleteUser, history, promoteToAdmin, i
                 dataSource={filtersEntered(filters) ? (filters.AND ? usersAndFilter : usersOrFilter) : users}
                 scroll={{ x:1000}}
                 pagination={false}
+                style={styles.marginBottom}
                 bordered={true}
                 rowKey='id'
                 expandedRowRender={record => {
@@ -447,6 +448,9 @@ const styles = {
     },
     marginTop: {
       marginTop: '1em'
+    },
+    marginBottom: {
+       marginBottom: '1em'
     },
     statisticContainer: {
         flexDirection: 'column',
