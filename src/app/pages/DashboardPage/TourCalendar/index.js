@@ -76,16 +76,15 @@ class TourCalendar extends Component {
     };
 
     dateCellRender = (value) => {
-        let listData;
+        let listData = this.getListData(value);
         if(this.state.personalFilter && this.state.coverageFilter){
-            listData = this.getListData(value).filter(tour => (tour.assignedGuideIds.includes(this.props.auth.id)) || (tour => tour.assignedGuides.length < tour.numberOfGuidesRequested));
+            listData = listData.filter(tour => tour.assignedGuideIds.includes(this.props.auth.uid) || tour.assignedGuides.length < tour.numberOfGuidesRequested);
         } else if(this.state.personalFilter) {
-            listData = this.getListData(value).filter(tour => tour.assignedGuideIds.includes(this.props.auth.uid))
+            listData = listData.filter(tour => tour.assignedGuideIds.includes(this.props.auth.uid))
         } else if(this.state.coverageFilter){
-            listData = this.getListData(value).filter(tour => tour.assignedGuideIds.length < tour.numberOfGuidesRequested)
-        } else {
-            listData = this.getListData(value)
+            listData = listData.filter(tour => tour.assignedGuideIds.length < tour.numberOfGuidesRequested)
         }
+
         if(listData.length > 0 && this.props.profile.roles) {
             return (
                 <ul className="events">
