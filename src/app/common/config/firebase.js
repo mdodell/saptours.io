@@ -16,7 +16,8 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 firebase.firestore();
-firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
+
+// firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE); // This sets persistence off. It can be turned on.
 
 firebase.auth().onAuthStateChanged((user) => {
     if(user) {
@@ -26,7 +27,5 @@ firebase.auth().onAuthStateChanged((user) => {
         }).catch(error => console.log(`There was an error updated the user's newest login: ${error.message}`));
     }
 });
-
-// TODO: Display lastLogin and loginCount in expandedRow UI
 
 export default firebase;
