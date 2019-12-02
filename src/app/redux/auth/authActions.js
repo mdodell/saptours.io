@@ -34,6 +34,8 @@ export const registerUser = (user) => {
                     activeStatus: true,
                     flexibility: true
                 },
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                loginCount: firebase.firestore.FieldValue.increment(1)
             };
             await firestore.set(`users/${createdUser.user.uid}`, {...newUser});
         } catch (error) {
@@ -136,8 +138,6 @@ export const deleteUser = (userToDelete, profile) => {
                         });
                     });
                 }
-
-        //        TODO: Remove guide from tour availability and any future tours
         } catch(error) {
             openNotification('error', 'bottomRight', 'Error', error.message, 3);
         }

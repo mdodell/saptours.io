@@ -11,7 +11,7 @@ import {
     Icon,
     Progress,
     Row,
-    Spin,
+    Spin, Col,
 } from 'antd';
 import {compose} from "redux";
 import {connect} from "react-redux";
@@ -144,9 +144,9 @@ const getDecision=(decisionType)=>{
 
 const displayClubs = clubs => clubs.map(club => <Tag key={club} color={getClubColor(club)}>{club}</Tag>);
 
-const displayExtraFields = (record, profile, auth, history, promoteToAdmin, incrementUserNoShows) =>{
+const displayExtraFields = (record, profile, auth, history, promoteToAdmin, incrementUserNoShows, deleteUser) =>{
     return(
-        <Descriptions title={expandedRowHeader(record, profile, auth, history, promoteToAdmin, incrementUserNoShows)} layout="horizontal" column={3} bordered>
+        <Descriptions title={expandedRowHeader(record, profile, auth, history, promoteToAdmin, incrementUserNoShows, deleteUser)} layout="horizontal" column={3} bordered>
             <Descriptions.Item label="Dietary Restrictions">
                 {record.dietaryRestrictions ?  record.dietaryRestrictions.length === 0 ? 'N/A' : record.dietaryRestrictions.join(', ') : 'N/A'}
             </Descriptions.Item>
@@ -182,67 +182,78 @@ const displayExtraFields = (record, profile, auth, history, promoteToAdmin, incr
     );
 };
 
-const expandedRowHeader = (record, profile, auth, history, promoteToAdmin, incrementUserNoShows) => {
+const expandedRowHeader = (record, profile, auth, history, promoteToAdmin, incrementUserNoShows, deleteUser) => {
     return (
-        <DefinedRow type="flex" align="middle" width="100%" height="100%">
-            <Title level={4} style={styles.noMargin}>Other Info</Title>
-            <Row type="flex" align="middle" justify="end" style={{flexGrow: '1'}}>
-                {record.id !== auth.uid &&
-                <Fragment>
-                    <Button type="primary" onClick={() => window.open(`https://mail.google.com/mail/u/0/?view=cm&fs=1&to=${record.email}`)}>Email User <Icon type="mail"/></Button>
-                    { profile.roles.admin && <Divider type="vertical" style={{background: '#545456'}}/>}
-                    </Fragment>
-                }
-                {(profile.roles.admin && !record.roles.admin) &&
-                <Fragment>
-                    <Popconfirm
-                        title={`Are you sure you want to promote ${record.fullName} to admin status?`}
-                        onConfirm={() => promoteToAdmin(record, profile)}
-                        onCancel={() => cancelAction(`${record.fullName} was not promoted!`)}
-                        okText="Yes"
-                        cancelText="No"
-                        placement="topRight"
-                    >
-                        <Button>Promote to Admin <Icon type="crown"/></Button>
-                    </Popconfirm>
-                    <Divider type="vertical" style={{background: '#545456'}}/>
-                </Fragment>
-                }
-                {
-                    (profile.roles.admin && record.roles.tourGuide) &&
-                    <Fragment>
-                        <Popconfirm
-                            title={`Are you sure you want to increment the number of no shows for ${record.fullName}?`}
-                            onConfirm={() => incrementUserNoShows(record.id)}
-                            onCancel={() => cancelAction('The user did not have an increase in no shows!')}
-                            okText="Yes"
-                            cancelText="No"
-                            placement="topRight"
-                        >
-                            <Button type="danger">Guide No Show <Icon type="frown"/></Button>
-                        </Popconfirm>
-                        <Divider type="vertical" style={{background: '#545456'}}/>
-                    </Fragment>
-                }
-                {
-                    ( record.id === auth.uid || profile.roles.admin ) &&
-                    <Popconfirm
-                        title={`Are you sure you want to delete ${record.fullName}?`}
-                        onConfirm={() => {
-                            deleteUser(record, profile);
-                            if(record.id === auth.uid) {
-                                history.push(HOME_ROUTE);
-                                }
-                                }}
-                        onCancel={() => cancelAction('The user was not deleted!')}
-                        okText="Yes"
-                        cancelText="No"
-                        placement="topRight"
-                    >
-                        <Button type="danger" style={{cursor: 'pointer'}}>Delete User <Icon type="delete"/></Button>
-                    </Popconfirm>
-                }
-                </Row>
+        <DefinedRow type="flex" width="100%" height="100%">
+            <Col span={24}>
+                <DefinedRow type="flex" align="middle" width="100%" height="100%">
+                    <Col>
+                        <Title level={4} style={styles.noMargin}>Other Info</Title>
+                    </Col>
+                    <Col style={styles.flexGrow}>
+                        <Row type="flex" align="middle" justify="end">
+                            {record.id !== auth.uid &&
+                            <Fragment>
+                                <Button type="primary" onClick={() => window.open(`https://mail.google.com/mail/u/0/?view=cm&fs=1&to=${record.email}`)}>Email User <Icon type="mail"/></Button>
+                                { profile.roles.admin && <Divider type="vertical" style={{background: '#545456'}}/>}
+                            </Fragment>
+                            }
+                            {(profile.roles.admin && !record.roles.admin) &&
+                            <Fragment>
+                                <Popconfirm
+                                    title={`Are you sure you want to promote ${record.fullName} to admin status?`}
+                                    onConfirm={() => promoteToAdmin(record, profile)}
+                                    onCancel={() => cancelAction(`${record.fullName} was not promoted!`)}
+                                    okText="Yes"
+                                    cancelText="No"
+                                    placement="topRight"
+                                >
+                                    <Button>Promote to Admin <Icon type="crown"/></Button>
+                                </Popconfirm>
+                                <Divider type="vertical" style={{background: '#545456'}}/>
+                            </Fragment>
+                            }
+                            {
+                                (profile.roles.admin && record.roles.tourGuide) &&
+                                <Fragment>
+                                    <Popconfirm
+                                        title={`Are you sure you want to increment the number of no shows for ${record.fullName}?`}
+                                        onConfirm={() => incrementUserNoShows(record.id)}
+                                        onCancel={() => cancelAction('The user did not have an increase in no shows!')}
+                                        okText="Yes"
+                                        cancelText="No"
+                                        placement="topRight"
+                                    >
+                                        <Button type="danger">Guide No Show <Icon type="frown"/></Button>
+                                    </Popconfirm>
+                                    <Divider type="vertical" style={{background: '#545456'}}/>
+                                </Fragment>
+                            }
+                            {
+                                ( record.id === auth.uid || profile.roles.admin ) &&
+                                <Popconfirm
+                                    title={`Are you sure you want to delete ${record.fullName}?`}
+                                    onConfirm={() => {
+                                        deleteUser(record, profile);
+                                        if(record.id === auth.uid) {
+                                            history.push(HOME_ROUTE);
+                                        }
+                                    }}
+                                    onCancel={() => cancelAction('The user was not deleted!')}
+                                    okText="Yes"
+                                    cancelText="No"
+                                    placement="topRight"
+                                >
+                                    <Button type="danger" style={{cursor: 'pointer'}}>Delete User <Icon type="delete"/></Button>
+                                </Popconfirm>
+                            }
+                        </Row>
+                    </Col>
+                </DefinedRow>
+            </Col>
+            {profile.roles.admin && <Col style={styles.marginTop} span={24}>
+                <Text strong level={4}>{`Last Login: ${record.lastLogin.toDate()}`}</Text>
+            </Col>}
         </DefinedRow>
         )
 };
@@ -383,14 +394,15 @@ const UserTable = ({users, profile, auth, deleteUser, history, promoteToAdmin, i
                 dataSource={filtersEntered(filters) ? (filters.AND ? usersAndFilter : usersOrFilter) : users}
                 scroll={{ x:1000}}
                 pagination={false}
+                style={styles.marginBottom}
                 bordered={true}
                 rowKey='id'
                 expandedRowRender={record => {
                     let {tourStatistics} = record;
                     return (
                         <div style={{ margin: 0 }}>
-                            {displayExtraFields(record, profile, auth, history, promoteToAdmin, incrementUserNoShows)}
-                            {profile.roles.admin &&
+                            {displayExtraFields(record, profile, auth, history, promoteToAdmin, incrementUserNoShows, deleteUser)}
+                            {(profile.roles.admin || auth.uid === record.id) &&
                                 <div style={styles.marginTop}>
                                     <Text style={styles.subHeadingStyle} strong level={4}>Tour Guide Statistics: {`(${record.tourStatistics.totalTours} ${record.tourStatistics.totalTours === 1 ? 'Tour' : 'Tours'})`}</Text>
                                     <Row type="flex" justify="space-between" style={styles.marginTop}>
@@ -445,8 +457,14 @@ const styles = {
         marginTop: '1em',
         marginBottom: '1em'
     },
+    flexGrow: {
+        flexGrow: '1'
+    },
     marginTop: {
       marginTop: '1em'
+    },
+    marginBottom: {
+       marginBottom: '1em'
     },
     statisticContainer: {
         flexDirection: 'column',

@@ -17,4 +17,15 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.firestore();
 
+// firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE); // This sets persistence off. It can be turned on.
+
+firebase.auth().onAuthStateChanged((user) => {
+    if(user) {
+        firebase.firestore().collection('users').doc(user.uid).update({
+            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+            loginCount: firebase.firestore.FieldValue.increment(1)
+        }).catch(error => console.log(`There was an error updated the user's newest login: ${error.message}`));
+    }
+});
+
 export default firebase;
