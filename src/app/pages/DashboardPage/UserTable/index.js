@@ -16,6 +16,7 @@ import {
 import {compose} from "redux";
 import {connect} from "react-redux";
 import {firestoreConnect} from "react-redux-firebase";
+import isEqual from 'lodash/isEqual';
 import {
     AND_QUERY,
     CLUB_TYPES,
@@ -264,13 +265,14 @@ const cancelAction = (messageText) => {
 
 const UserTable = ({users, profile, auth, deleteUser, history, promoteToAdmin, incrementUserNoShows}) => {
 
-    const [filters, updateFilters] = useState({
+    const initialFilterState = {
         majors: [],
         minors: [],
         decisionType: [],
         AND: false,
         state: null
-    });
+    };
+    const [filters, updateFilters] = useState(initialFilterState);
     if(!profile.isLoaded && profile.isEmpty && !profile.roles){
         return (
             <DefinedRow type="flex" direction="column" height="100%" width="100%" justify="center" align="middle">
@@ -358,22 +360,23 @@ const UserTable = ({users, profile, auth, deleteUser, history, promoteToAdmin, i
         ((user.state && user.state === filters.state) || !filters.state)
     );
 
-    const usersOrFilter = users && users.filter(user =>
-        ((user.majors && user.majors.some(major => filters.majors.indexOf(major) >= 0))) ||
-        ((user.minors && user.minors.some(minor => filters.minors.indexOf(minor) >= 0))) ||
-        (user.decisionType &&
-            (
-                (user.decisionType.ED1 && filters.decisionType.includes(ED1)) ||
-                (user.decisionType.ED2 && filters.decisionType.includes(ED2)) ||
-                (user.decisionType.regularDecision && filters.decisionType.includes(REGULAR_DECISION)) ||
-                (user.decisionType.midyear && filters.decisionType.includes(MIDYEAR)) ||
-                (user.decisionType.POSSE && filters.decisionType.includes(POSSE)) ||
-                (user.decisionType.MKTYP && filters.decisionType.includes(MKTYP)) ||
-                (user.decisionType.international && filters.decisionType.includes(INTERNATIONAL_STUDENT)) ||
-                (user.decisionType.legacy && filters.decisionType.includes(LEGACY_STUDENT)) ||
-                (user.decisionType.transfer && filters.decisionType.includes(TRANSFER_STUDENT))
-            )
-        ) || ((user.state && user.state === filters.state) || !filters.state)
+    const usersOrFilter = users && users.filter(user => {
+        return (user.majors && user.majors.some(major => filters.majors.indexOf(major) >= 0)) ||
+            (user.minors && user.minors.some(minor => filters.minors.indexOf(minor) >= 0)) ||
+            (user.decisionType &&
+                (
+                    (user.decisionType.ED1 && filters.decisionType.includes(ED1)) ||
+                    (user.decisionType.ED2 && filters.decisionType.includes(ED2)) ||
+                    (user.decisionType.regularDecision && filters.decisionType.includes(REGULAR_DECISION)) ||
+                    (user.decisionType.midyear && filters.decisionType.includes(MIDYEAR)) ||
+                    (user.decisionType.POSSE && filters.decisionType.includes(POSSE)) ||
+                    (user.decisionType.MKTYP && filters.decisionType.includes(MKTYP)) ||
+                    (user.decisionType.international && filters.decisionType.includes(INTERNATIONAL_STUDENT)) ||
+                    (user.decisionType.legacy && filters.decisionType.includes(LEGACY_STUDENT)) ||
+                    (user.decisionType.transfer && filters.decisionType.includes(TRANSFER_STUDENT))
+                )
+            ) || ((user.state && user.state === filters.state)) || isEqual(filters, initialFilterState)
+        }
     );
 
     return (
