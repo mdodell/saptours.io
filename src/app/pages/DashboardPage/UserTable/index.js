@@ -145,38 +145,39 @@ const getDecision=(decisionType)=>{
 
 const displayClubs = clubs => clubs.map(club => <Tag key={club} color={getClubColor(club)}>{club}</Tag>);
 
-const displayExtraFields = (record, profile, auth, history, promoteToAdmin, incrementUserNoShows, deleteUser) =>{
+const displayExtraFields = (record, profile, auth, history, promoteToAdmin, incrementUserNoShows, deleteUser) => {
+    const notAvailableText = "N/A";
     return(
         <Descriptions title={expandedRowHeader(record, profile, auth, history, promoteToAdmin, incrementUserNoShows, deleteUser)} layout="horizontal" column={3} bordered>
+            <Descriptions.Item label="Hometown">
+                {(record.city) ? `${record.city}${record.state ? ', ' + record.state : ''}` : notAvailableText}
+            </Descriptions.Item>
+            <Descriptions.Item label="High School">
+                {(record.highSchool) ? record.highSchool : notAvailableText}
+            </Descriptions.Item>
             <Descriptions.Item label="Dietary Restrictions">
-                {record.dietaryRestrictions ?  record.dietaryRestrictions.length === 0 ? 'N/A' : record.dietaryRestrictions.join(', ') : 'N/A'}
+                {record.dietaryRestrictions ?  record.dietaryRestrictions.length === 0 ? notAvailableText : record.dietaryRestrictions.join(', ') : notAvailableText}
+            </Descriptions.Item>
+            <Descriptions.Item label="Graduation Plans">
+                {(record.graduationPlans) ? record.graduationPlans : notAvailableText}
+            </Descriptions.Item>
+            <Descriptions.Item label="Internships & Study Abroad">
+                {(record.internships) ? record.internships : notAvailableText}
+            </Descriptions.Item>
+            <Descriptions.Item label="Jobs">
+                {(record.jobs) ? record.jobs : notAvailableText}
+            </Descriptions.Item>
+            <Descriptions.Item label="Decision Type">
+                {(record.decisionType) ? getDecision(record.decisionType) : notAvailableText}
             </Descriptions.Item>
             <Descriptions.Item label="Research">
                 {(record.research) ? record.research : ("N/A")}
             </Descriptions.Item>
-            <Descriptions.Item label="Graduation Plans">
-                {(record.graduationPlans) ? record.graduationPlans : ("N/A")}
+            <Descriptions.Item>
             </Descriptions.Item>
-            <Descriptions.Item label="High School">
-                {(record.highSchool) ? record.highSchool : ("N/A")}
-            </Descriptions.Item>
-            <Descriptions.Item label="Hometown">
-                {(record.city) ? `${record.city}${record.state ? ', ' + record.state : ''}` : ("N/A")}
-            </Descriptions.Item>
-            <Descriptions.Item label="Internships & Study Abroad">
-                {(record.internships) ? record.internships : ("N/A")}
-            </Descriptions.Item>
-            <Descriptions.Item label="Jobs">
-                {(record.jobs) ? record.jobs : ("N/A")}
-            </Descriptions.Item>
-            <Descriptions.Item label="Decision Type">
-                {(record.decisionType) ? getDecision(record.decisionType) : ("N/A")}
-            </Descriptions.Item>
-            <Descriptions.Item label="Dietary Restrictions">
-                {(record.dietaryRestrictions) ? record.dietaryRestrictions : ("N/A")}
-            </Descriptions.Item>
+            {/*Clubs should be on a full line by itself.*/}
             <Descriptions.Item label="Clubs">
-                {(record.clubs) ? displayClubs(record.clubs) : ("N/A")}
+                {(record.clubs) ? displayClubs(record.clubs) : notAvailableText}
             </Descriptions.Item>
         </Descriptions>
 
